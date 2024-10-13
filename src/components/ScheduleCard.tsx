@@ -94,20 +94,22 @@ export default function ScheduleCard({
             <span>Número de contrato: {notification.cuen}</span>
             <span>
               <Badge variant="destructive">
-                <span className="mr-1">Próximo corte en</span>
-                {/* Usamos span en lugar de p */}
-                <span>
-                  <relative-time
-                    tense="future"
-                    threshold="P0S"
-                    className="ml-1"
-                    lang="es"
-                    datetime={getNearestCutDate(
-                      notification.groupedPlanificacion!
-                    )?.toISOString()}
-                    format="duration"
-                    precision="minute"
-                  ></relative-time>
+                <span className="text-center">
+                  <span className="mr-1">Próximo corte en</span>
+                  {/* Usamos span en lugar de p */}
+                  <span>
+                    <relative-time
+                      tense="future"
+                      threshold="P0S"
+                      className="ml-1"
+                      lang="es"
+                      datetime={getNearestCutDate(
+                        notification.groupedPlanificacion!
+                      )?.toISOString()}
+                      format="duration"
+                      precision="minute"
+                    ></relative-time>
+                  </span>
                 </span>
               </Badge>
             </span>
@@ -147,9 +149,9 @@ export default function ScheduleCard({
                     <span className="border-r flex-grow text-center">
                       {value.horaDesde}-{value.horaHasta}
                     </span>
-                    <span className="text-center flex-none px-0.5">
+                    {/* <span className="text-center flex-none px-0.5">
                       {getTotalHours([value])}
-                    </span>
+                    </span> */}
                   </div>
                 ))}
               </CardContent>
