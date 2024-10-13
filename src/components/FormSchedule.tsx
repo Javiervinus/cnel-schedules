@@ -159,7 +159,7 @@ export default function FormSchedule() {
                     key={index}
                     className={`${
                       schedule.notificaciones?.length! > 1
-                        ? "basis-[90%]"
+                        ? "basis-[85%]"
                         : "basis-[100%]"
                     } `}
                   >
