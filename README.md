@@ -4,6 +4,10 @@
 [![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![Shadcn/UI](https://img.shields.io/badge/Shadcn/UI-000000?logo=github&logoColor=white)](https://ui.shadcn.com/)
 
+## Acceder a la Aplicación
+
+Accede en el siguiente enlace: [Rastreador de Cortes de Luz de CNEL EP](https://cnel-schedules.vercel.app/)
+
 ## Descripción
 
 Esta aplicación web te permite consultar los cortes de luz programados por **CNEL EP** en Ecuador. Desarrollada con **Astro**, **React** y **Shadcn/UI**, ofrece la misma información que la página oficial de [CNEL EP](https://serviciosenlinea.cnelep.gob.ec/cortes-energia/), pero con detalles adicionales y una experiencia de usuario más fluida.
