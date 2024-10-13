@@ -2,14 +2,44 @@
 import FormSchedule from "@/components/FormSchedule";
 import "@/styles/globals.css";
 import Layout from "../layouts/Layout.astro";
+import { ModeToggle } from "@/components/ModeToggle";
+import { Button } from "@/components/ui/button";
+import { Github } from "lucide-react";
+import Appbar from "@/components/Appbar.astro";
 ---
 
+<script is:inline>
+  const getThemePreference = () => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+      return localStorage.getItem("theme");
+    }
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  };
+  const isDark = getThemePreference() === "dark";
+  document.documentElement.classList[isDark ? "add" : "remove"]("dark");
+
+  if (typeof localStorage !== "undefined") {
+    const observer = new MutationObserver(() => {
+      const isDark = document.documentElement.classList.contains("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+  }
+</script>
 <Layout title="Horarios CNEL">
-  <main class="m-auto p-6 max-w-2xl">
-    <h1 class="text-3xl font-medium text-center mb-4">
-      Horarios <span class="text-[#2364B0]">CNEL</span>
-    </h1>
-    <FormSchedule client:only="react" />
-  </main>
+  <div class="relative flex min-h-screen flex-col bg-background">
+    <Appbar />
+
+    <main class="flex justify-center items-center flex-col">
+      <div class="max-w-full w-full md:max-w-screen-lg px-6">
+        <FormSchedule client:only="react" />
+      </div>
+    </main>
+  </div>
   <!-- <Input /> -->
 </Layout>
