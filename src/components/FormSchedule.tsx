@@ -96,8 +96,6 @@ export default function FormSchedule() {
         setSchedule(mapResponse(data));
         setError(null);
       }
-
-      console.log("Response:", data);
     } catch (error) {
       console.error("Error during search request:", error);
     } finally {
@@ -129,7 +127,7 @@ export default function FormSchedule() {
         </div>
 
         <Button
-          className="col-span-1"
+          className="col-span-2 md:col-span-2 w-full"
           type="submit"
           disabled={loading || idValue === ""}
         >
