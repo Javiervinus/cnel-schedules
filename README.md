@@ -1,54 +1,72 @@
-# Astro Starter Kit: Basics
+# Rastreador de Cortes de Luz de CNEL EP
 
-```sh
-npm create astro@latest -- --template basics
+[![Astro](https://img.shields.io/badge/Astro-0C1222?logo=astro&logoColor=FF5D01)](https://astro.build/)
+[![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![Shadcn/UI](https://img.shields.io/badge/Shadcn/UI-000000?logo=github&logoColor=white)](https://ui.shadcn.com/)
+
+## Descripción
+
+Esta aplicación web te permite consultar los cortes de luz programados por **CNEL EP** en Ecuador. Desarrollada con **Astro**, **React** y **Shadcn/UI**, ofrece la misma información que la página oficial de [CNEL EP](https://serviciosenlinea.cnelep.gob.ec/cortes-energia/), pero con detalles adicionales y una experiencia de usuario más fluida.
+
+## Características
+
+- Consulta sencilla de los cortes de luz en tu área.
+- Información detallada sobre fechas, horarios y zonas afectadas.
+- Interfaz amigable que mejora la usabilidad respecto al sitio oficial.
+
+## Tecnologías Utilizadas
+
+- [**Astro**](https://astro.build/): Framework moderno para construir sitios web rápidos.
+- [**React**](https://reactjs.org/): Biblioteca de JavaScript para interfaces de usuario interactivas.
+- [**Shadcn/UI**](https://ui.shadcn.com/): Colección de componentes UI para React.
+
+## Instalación
+
+1. **Clona** este repositorio:
+
+   ```bash
+   git clone https://github.com/tuusuario/tu-repositorio.git
+   ```
+
+2. **Entra** al directorio del proyecto:
+
+   ```bash
+   cd tu-repositorio
+   ```
+
+3. **Instala** las dependencias:
+
+   ```bash
+   npm install
+   # o
+   yarn install
+   ```
+
+## Uso
+
+1. **Inicia** el servidor de desarrollo:
+
+   ```bash
+   npm run dev
+   # o
+   yarn dev
+   ```
+
+2. **Abre** `http://localhost:4321` en tu navegador para usar la aplicación.
+
+## Información de la API
+
+La aplicación utiliza la API oficial de CNEL EP para obtener los datos de los cortes de luz:
+
+```javascript
+const response = await fetch(
+  `https://api.cnelep.gob.ec/servicios-linea/v1/notificaciones/consultar/${idValue}/${idType}`
+);
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+- **`idValue`**: Tu número de identificación.
+- **`idType`**: Tipo de identificación.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+---
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+_Creado por diversión y para practicar. ¡Espero que te sea útil!_
