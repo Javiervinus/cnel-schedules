@@ -1,3 +1,5 @@
+import type { GroupedPlanificacion } from "./grouped-planification";
+
 export interface ScheduleResponse {
   resp: string;
   mensaje?: string;
@@ -13,7 +15,8 @@ export interface Notificacion {
   cuen: string;
   direccion: string;
   fechaRegistro: string;
-  detallePlanificacion: DetallePlanificacion[];
+  detallePlanificacion?: DetallePlanificacion[];
+  groupedPlanificacion?: GroupedPlanificacion[];
 }
 
 export interface DetallePlanificacion {
