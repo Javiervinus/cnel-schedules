@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import type {
   DetallePlanificacion,
   ScheduleResponse,
 } from "@/interfaces/schedule-response";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, X } from "lucide-react";
 import { IdType } from "../constants/idTypes";
 import useLocalStorage from "./hooks/useLocalStorage";
 import IdTypeSelect from "./IdTypeSelect";
@@ -18,12 +18,13 @@ import ScheduleCard from "./ScheduleCard";
 import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
 
 export default function FormSchedule() {
-  const [idValue, setIdValue] = useLocalStorage<string>("idValue", "");
+  const [idValue, setIdValue] = useLocalStorage<string>("idValue", "", false);
   const [idType, setIdType] = useLocalStorage<IdType>("idType", IdType.Ci);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [schedule, setSchedule] = useState<ScheduleResponse | null>(null);
   const now = new Date();
+  const inputRef = useRef<HTMLInputElement>(null); // Creamos la referencia
 
   function mapResponse(data: ScheduleResponse): ScheduleResponse {
     const mappedData = data.notificaciones?.map((notificacion) => {
@@ -74,7 +75,7 @@ export default function FormSchedule() {
     setLoading(true);
     try {
       // Guardar en localStorage
-      setIdValue(idValue);
+      setIdValue(idValue, true);
       setIdType(idType);
 
       // https://api.cnelep.gob.ec/servicios-linea/v1/notificaciones/consultar/0913193074/IDENTIFICACION
@@ -105,9 +106,14 @@ export default function FormSchedule() {
 
   useEffect(() => {
     if (idValue !== "" && idType) {
+      console.log("Auto searching...");
       handleSubmit();
     }
   }, []);
+  const handleClear = () => {
+    setIdValue("", false); // Limpiamos el valor
+    inputRef.current?.focus(); // Enfocamos el input
+  };
 
   return (
     <>
@@ -115,19 +121,29 @@ export default function FormSchedule() {
         onSubmit={handleSubmit}
         className="grid grid-cols-1 md:grid-cols-5 gap-2 w-full"
       >
-        <Input
-          className="col-span-2"
-          placeholder="Identificación"
-          value={idValue}
-          onChange={(e) => setIdValue(e.target.value)}
-          required
-        />
+        <div className="col-span-2 relative">
+          <Input
+            ref={inputRef}
+            placeholder="Identificación"
+            value={idValue}
+            onChange={(e) => setIdValue(e.target.value, false)} // No guardar en localStorage en el onChange
+            required
+          />
+          <Button
+            type="button"
+            variant="ghost"
+            className="absolute right-0 top-0"
+            onClick={handleClear}
+          >
+            <X size={16} strokeWidth={0.7}></X>
+          </Button>
+        </div>
         <div className="col-span-2">
           <IdTypeSelect idType={idType} setIdType={setIdType} />
         </div>
 
         <Button
-          className="col-span-2 md:col-span-2 w-full"
+          className="col-span-2 md:col-span-1 w-full"
           type="submit"
           disabled={loading || idValue === ""}
         >

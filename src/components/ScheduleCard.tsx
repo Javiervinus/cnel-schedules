@@ -127,10 +127,7 @@ export default function ScheduleCard({
                 <CardTitle>
                   {capitalizeFirstLetter(formatDate(detail.date))}
                   {detail.date.toDateString() === now.toDateString() && (
-                    <Badge
-                      className="absolute top-0 right-0"
-                      variant="secondary"
-                    >
+                    <Badge className="absolute top-0 right-0" variant="default">
                       Hoy
                     </Badge>
                   )}
