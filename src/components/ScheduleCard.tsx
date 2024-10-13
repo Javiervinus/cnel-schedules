@@ -140,13 +140,13 @@ export default function ScheduleCard({
                   {getTotalHours(detail.values)} horas
                 </CardDescription>
               </CardHeader>
-              <CardContent className="grid grid-cols-2 gap-2">
+              <CardContent className="grid grid-cols-2 gap-x-1 gap-y-2 md:gap-x-2 md:gap-y-2">
                 {detail.values.map((value, index) => (
                   <div
                     className="border flex justify-between"
                     key={`group-${index}`}
                   >
-                    <span className="border-r flex-grow text-center">
+                    <span className=" flex-grow text-center">
                       {value.horaDesde}-{value.horaHasta}
                     </span>
                     {/* <span className="text-center flex-none px-0.5">
