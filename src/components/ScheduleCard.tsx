@@ -93,7 +93,7 @@ export default function ScheduleCard({
             <span>Dirección: {notification.direccion}</span>
             <span>Número de contrato: {notification.cuen}</span>
             <span>
-              <Badge variant="outline">
+              <Badge variant="destructive">
                 <span className="mr-1">Próximo corte en</span>
                 {/* Usamos span en lugar de p */}
                 <span>
