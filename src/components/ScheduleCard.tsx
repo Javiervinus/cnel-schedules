@@ -119,15 +119,18 @@ export default function ScheduleCard({
       <CardContent>
         <section className="grid gird-cols-2 md:grid-cols-3 gap-3">
           {notification.groupedPlanificacion?.map((detail, index) => (
-            <article
-              className="border border-gray-200 rounded relative"
+            <Card
+              className=" shadow-none relative"
               key={`${notification.cuentaContrato}-${detail.fechaCorte}`}
             >
               <CardHeader>
                 <CardTitle>
                   {capitalizeFirstLetter(formatDate(detail.date))}
                   {detail.date.toDateString() === now.toDateString() && (
-                    <Badge className="absolute top-0 right-0" variant="default">
+                    <Badge
+                      className="absolute top-0 right-0"
+                      variant="secondary"
+                    >
                       Hoy
                     </Badge>
                   )}
@@ -140,15 +143,12 @@ export default function ScheduleCard({
               <CardContent className="grid grid-cols-2 gap-x-1 gap-y-2 md:gap-x-2 md:gap-y-2">
                 {detail.values.map((value, index) => (
                   <div
-                    className="border flex justify-between"
+                    className="border rounded-md flex justify-between"
                     key={`group-${index}`}
                   >
                     <span className=" flex-grow text-center">
                       {value.horaDesde}-{value.horaHasta}
                     </span>
-                    {/* <span className="text-center flex-none px-0.5">
-                      {getTotalHours([value])}
-                    </span> */}
                   </div>
                 ))}
               </CardContent>
@@ -159,7 +159,7 @@ export default function ScheduleCard({
                 Hasta: {value.horaHasta}
               </CardContent>
             ))} */}
-            </article>
+            </Card>
           ))}
         </section>
       </CardContent>
