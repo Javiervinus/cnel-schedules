@@ -154,9 +154,18 @@ export default function FormSchedule() {
         <div className="col-span-2 relative">
           <Input
             ref={inputRef}
+            inputMode="numeric"
             placeholder="Identificación"
             value={idValue}
-            onChange={(e) => setIdValue(e.target.value, true)} // No guardar en localStorage en el onChange
+            pattern="\d*"
+            onChange={(e) => {
+              const value = e.target.value;
+              // Validar que solo se ingresen números
+              if (/^\d*$/.test(value)) {
+                setIdValue(value, true); // No guardar en localStorage en el onChange
+              }
+            }}
+            // No guardar en localStorage en el onChange
             required
           />
           <Button
