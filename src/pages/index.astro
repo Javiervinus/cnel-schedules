@@ -2,9 +2,8 @@
 import FormSchedule from "@/components/FormSchedule";
 import "@/styles/globals.css";
 import Layout from "../layouts/Layout.astro";
-import { ModeToggle } from "@/components/ModeToggle";
-import { Button } from "@/components/ui/button";
-import { Github } from "lucide-react";
+
+import Footer from "@/components/Footer.astro";
 import Appbar from "@/components/Appbar.astro";
 ---
 
@@ -41,6 +40,7 @@ import Appbar from "@/components/Appbar.astro";
         <FormSchedule client:only="react" />
       </div>
     </main>
+    <Footer />
   </div>
   <!-- <Input /> -->
 </Layout>
