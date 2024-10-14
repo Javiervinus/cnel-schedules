@@ -23,7 +23,6 @@ export default function FormSchedule() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [schedule, setSchedule] = useState<ScheduleResponse | null>(null);
-  const now = new Date();
   const inputRef = useRef<HTMLInputElement>(null); // Creamos la referencia
 
   function mapResponse(data: ScheduleResponse): ScheduleResponse {
@@ -70,19 +69,26 @@ export default function FormSchedule() {
       (a, b) => a.date.getTime() - b.date.getTime()
     );
   }
-  const handleSubmit = async (event?: React.FormEvent) => {
+  const handleSubmit = async (
+    event?: React.FormEvent,
+    idValueEntered?: string,
+    idTypeEntered?: IdType
+  ) => {
     event?.preventDefault();
     setLoading(true);
     try {
       // Guardar en localStorage
-      setIdValue(idValue, true);
-      setIdType(idType);
+      const requestIdValue = idValueEntered ?? idValue;
+      const requestIdType = idTypeEntered ?? idType;
+
+      setIdValue(requestIdValue, true);
+      setIdType(requestIdType);
 
       // https://api.cnelep.gob.ec/servicios-linea/v1/notificaciones/consultar/0913193074/IDENTIFICACION
 
       // Hacer la petición HTTP
       const response = await fetch(
-        `https://api.cnelep.gob.ec/servicios-linea/v1/notificaciones/consultar/${idValue}/${idType}`
+        `https://api.cnelep.gob.ec/servicios-linea/v1/notificaciones/consultar/${requestIdValue}/${requestIdType}`
       );
 
       if (!response.ok) {
@@ -103,10 +109,8 @@ export default function FormSchedule() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     if (idValue !== "" && idType) {
-      console.log("Auto searching...");
       handleSubmit();
     }
   }, []);
@@ -114,6 +118,32 @@ export default function FormSchedule() {
     setIdValue("", false); // Limpiamos el valor
     inputRef.current?.focus(); // Enfocamos el input
   };
+  // Función handleFocus definida fuera del useEffect
+  const handleFocus = () => {
+    const idValueEntered = JSON.parse(localStorage.getItem("idValue") ?? "");
+    const idTypeEntered = JSON.parse(localStorage.getItem("idType") ?? "");
+
+    if (
+      idValueEntered &&
+      idValueEntered !== "" &&
+      idTypeEntered &&
+      idTypeEntered !== "" &&
+      !loading &&
+      !error
+    ) {
+      handleSubmit(undefined, idValueEntered, idTypeEntered as IdType);
+    }
+  };
+
+  // Efecto para manejar el foco de la ventana
+  useEffect(() => {
+    window.addEventListener("focus", handleFocus);
+
+    // Limpia el listener cuando el componente se desmonta
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, []); // Se vuelve a suscribir si cambian idValue o idType
 
   return (
     <>
@@ -126,7 +156,7 @@ export default function FormSchedule() {
             ref={inputRef}
             placeholder="Identificación"
             value={idValue}
-            onChange={(e) => setIdValue(e.target.value, false)} // No guardar en localStorage en el onChange
+            onChange={(e) => setIdValue(e.target.value, true)} // No guardar en localStorage en el onChange
             required
           />
           <Button
@@ -187,7 +217,7 @@ export default function FormSchedule() {
 
             <section className="md:grid grid-cols-1 gap-4 hidden ">
               {schedule?.notificaciones?.map((notification, index) => (
-                <ScheduleCard notification={notification} />
+                <ScheduleCard key={index} notification={notification} />
               ))}
             </section>
           </>

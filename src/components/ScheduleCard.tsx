@@ -87,7 +87,7 @@ export default function ScheduleCard({
     <Card key={notification.cuentaContrato}>
       <CardHeader>
         <CardTitle>Contrato {notification.cuentaContrato}</CardTitle>
-        <CardDescription>
+        <div className="text-sm text-muted-foreground">
           <span className="flex flex-col gap-1">
             <span>Alimentador: {notification.alimentador}</span>
             <span>Dirección: {notification.direccion}</span>
@@ -114,7 +114,7 @@ export default function ScheduleCard({
               </Badge>
             </span>
           </span>
-        </CardDescription>
+        </div>
       </CardHeader>
       <CardContent>
         <section className="grid gird-cols-2 md:grid-cols-3 gap-3">
