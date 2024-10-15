@@ -4,7 +4,7 @@ import type {
   DetallePlanificacion,
   ScheduleResponse,
 } from "@/interfaces/schedule-response";
-import { AlertCircle, X } from "lucide-react";
+import { AlertCircle, Search, X } from "lucide-react";
 import { IdType } from "../constants/idTypes";
 import useLocalStorage from "./hooks/useLocalStorage";
 import IdTypeSelect from "./IdTypeSelect";
@@ -15,6 +15,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import type { GroupedPlanificacion } from "@/interfaces/grouped-planification";
 import { parseDateString } from "@/lib/utils";
 import ScheduleCard from "./ScheduleCard";
+import Spinner from "./spinner";
 import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
 
 export default function FormSchedule() {
@@ -52,6 +53,9 @@ export default function FormSchedule() {
 
       // Parse the date using fechaHoraCorte
       const date = parseDateString(fechaHoraCorte);
+      date.setHours(+item.horaDesde.split(":")[0]);
+
+      item.cutDate = date;
 
       if (!map.has(fechaCorte)) {
         map.set(fechaCorte, {
@@ -84,27 +88,46 @@ export default function FormSchedule() {
       setIdValue(requestIdValue, true);
       setIdType(requestIdType);
 
-      // https://api.cnelep.gob.ec/servicios-linea/v1/notificaciones/consultar/0913193074/IDENTIFICACION
+      // Crear un controlador para abortar la petición si excede el tiempo de espera
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 7000); // 10 segundos
 
       // Hacer la petición HTTP
       const response = await fetch(
-        `https://api.cnelep.gob.ec/servicios-linea/v1/notificaciones/consultar/${requestIdValue}/${requestIdType}`
+        `https://api.cnelep.gob.ec/servicios-linea/v1/notificaciones/consultar/${requestIdValue}/${requestIdType}`,
+        {
+          signal: controller.signal,
+        }
       );
-
+      clearTimeout(timeoutId); // Limpiar el timeout si la petición se completa a tiempo
       if (!response.ok) {
+        console.error("Network response was not ok");
         throw new Error("Network response was not ok");
       }
 
       const data = (await response.json()) as ScheduleResponse;
       if (data.resp === "ERROR") {
-        setError(data.mensaje ?? "Error al buscar los horarios");
+        setError(
+          data.mensaje ??
+            "Error al buscar los horarios" + ". Por favor, intenta de nuevo."
+        );
         return;
       } else {
         setSchedule(mapResponse(data));
         setError(null);
       }
-    } catch (error) {
+    } catch (error: any) {
+      // if (error.name === "AbortError") {
+      //   setError("Tiempo de espera excedido para la solicitud");
+      // } else {
+      //   setError("Servicio de CNEL EP actualmente no disponible");
+      // }
+      setError(
+        "Servicio de CNEL EP actualmente no disponible. Intente más tarde por favor."
+      );
+
       console.error("Error during search request:", error);
+      setLoading(false);
     } finally {
       setLoading(false);
     }
@@ -149,9 +172,9 @@ export default function FormSchedule() {
     <>
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-5 gap-2 w-full"
+        className="grid grid-cols-7 md:grid-cols-5 gap-2 w-full"
       >
-        <div className="col-span-2 relative">
+        <div className="col-span-3 md:col-span-2 relative">
           <Input
             ref={inputRef}
             inputMode="numeric"
@@ -177,16 +200,21 @@ export default function FormSchedule() {
             <X size={16} strokeWidth={0.7}></X>
           </Button>
         </div>
-        <div className="col-span-2">
+        <div className="col-span-3 md:col-span-2">
           <IdTypeSelect idType={idType} setIdType={setIdType} />
         </div>
 
         <Button
-          className="col-span-2 md:col-span-1 w-full"
+          className="col-span-1 md:col-span-1 w-full"
           type="submit"
           disabled={loading || idValue === ""}
         >
-          {loading ? "Buscando..." : "Buscar"}
+          <span className="hidden md:block">
+            {loading ? "Buscando..." : "Buscar"}
+          </span>
+          <span className="block md:hidden">
+            {loading ? <Spinner /> : <Search size={15} />}
+          </span>
         </Button>
       </form>
       <section className="mt-4">
@@ -194,9 +222,7 @@ export default function FormSchedule() {
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
-            <AlertDescription>
-              {error}. Por favor, intenta de nuevo.
-            </AlertDescription>
+            <AlertDescription>{error}</AlertDescription>
           </Alert>
         ) : (
           <>
