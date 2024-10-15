@@ -15,7 +15,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import type { GroupedPlanificacion } from "@/interfaces/grouped-planification";
 import { parseDateString } from "@/lib/utils";
 import ScheduleCard from "./ScheduleCard";
-import Spinner from "./spinner";
+import Spinner from "./SpinnerLoading";
 import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
 
 export default function FormSchedule() {
