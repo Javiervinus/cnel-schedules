@@ -91,7 +91,7 @@ export default function ScheduleCard({
           <span className="flex flex-col gap-1">
             <span>Alimentador: {notification.alimentador}</span>
             <span>Dirección: {notification.direccion}</span>
-            <span>Número de contrato: {notification.cuen}</span>
+            <span>Código único: {notification.cuen}</span>
             <span>
               <Badge variant="destructive">
                 <span className="text-center">
