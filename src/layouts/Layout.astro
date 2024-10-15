@@ -12,17 +12,50 @@ const { title } = Astro.props;
     <meta charset="UTF-8" />
     <meta
       name="description"
-      content="Revisa los horarios de cortes de luz de CNEL"
+      content="Consulta los horarios actualizados de cortes de luz de CNEL en Ecuador. Mantente informado y planifica tu día con nuestro servicio en línea."
     />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
     />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <meta name="keywords" content="CNEL, Ecuador,Cortes de luz" />
+    <meta
+      name="google-site-verification"
+      content={import.meta.env.GOOGLE_SITE_VERIFICATION}
+    />
+
+    <link rel="canonical" href={import.meta.env.SITE} />
 
     <meta name="author" content="Javier Vinueza" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Horarios CNEL - Cortes de Luz Ecuador" />
+    <meta
+      property="og:description"
+      content="Consulta los horarios de cortes de luz de CNEL en Ecuador. Mantente informado y planifica tu día con nuestro servicio en línea."
+    />
+    <meta
+      property="og:image"
+      content={import.meta.env.SITE + "/images/cnel-schedule-og.jpg"}
+    />
+    <meta property="og:url" content={import.meta.env.SITE} />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Horarios CNEL - Cortes de Luz Ecuador"
+    />
+    <meta
+      name="twitter:description"
+      content="Consulta los horarios de cortes de luz de CNEL en Ecuador. Mantente informado y planifica tu día con nuestro servicio en línea."
+    />
+    <meta
+      name="twitter:image"
+      content={import.meta.env.SITE + "/images/cnel-schedule-og.jpg"}
+    />
 
     <title>{title}</title>
   </head>
@@ -63,3 +96,18 @@ const { title } = Astro.props;
     font-size: 16px;
   }
 </style>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Horarios CNEL",
+    "url": "https://cnel-schedules.vercel.app/",
+    "description": "Consulta los horarios actualizados de cortes de luz de CNEL en Ecuador.",
+    "author": {
+      "@type": "Person",
+      "name": "Javier Vinueza",
+      "url": "https://github.com/Javiervinus",
+      "sameAs": ["https://www.linkedin.com/in/javier-vinueza-08759a74"]
+    }
+  }
+</script>
