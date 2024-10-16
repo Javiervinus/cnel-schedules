@@ -137,6 +137,7 @@ export default function FormSchedule() {
           data.mensaje ??
             "Error al buscar los horarios" + ". Por favor, intenta de nuevo."
         );
+        setSchedule(null);
         return;
       } else {
         setBackUpIdValue(requestIdValue);
@@ -305,14 +306,6 @@ export default function FormSchedule() {
                   : "Nunca")} */}
           </Badge>
         </div>
-
-        {/* <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>
-              {errorCnelep ? "Servicio no disponible" : "Error"}
-            </AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert> */}
         <Carousel
           opts={{
             align: "start",
