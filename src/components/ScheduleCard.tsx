@@ -114,7 +114,7 @@ export default function ScheduleCard({
                         ? "destructive"
                         : "outline"
                     }
-                    className="text-sm"
+                    className="text-sm px-0 md:px-2.5"
                   >
                     <span className=" flex-grow text-center ">
                       {value.horaDesde}-{value.horaHasta}
