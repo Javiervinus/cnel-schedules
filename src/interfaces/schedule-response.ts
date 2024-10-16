@@ -27,5 +27,6 @@ export interface DetallePlanificacion {
   comentario?: string;
   fechaRegistro: string;
   fechaHoraCorte: string;
-  cutDate?: Date;
+  cutDateFrom?: Date;
+  cutDateTo?: Date;
 }

@@ -1,10 +1,13 @@
-import type { GroupedPlanificacion } from "@/interfaces/grouped-planification";
-import type {
-  DetallePlanificacion,
-  Notificacion,
-} from "@/interfaces/schedule-response";
+import type { Notificacion } from "@/interfaces/schedule-response";
+import {
+  getNearestCutDate,
+  getTotalHours,
+  isCurrentCut,
+} from "@/lib/cut.utils";
 import { capitalizeFirstLetter, formatDate } from "@/lib/utils";
 import "@github/relative-time-element";
+import { useEffect, useState } from "react";
+import Lightbulb from "./Lightbulb";
 import { Badge } from "./ui/badge";
 import {
   Card,
@@ -20,80 +23,39 @@ export default function ScheduleCard({
   notification: Notificacion;
 }) {
   const now = new Date();
+  const [nearestCutDate, setNearestCutDate] = useState(
+    getNearestCutDate(notification.groupedPlanificacion!)
+  );
+  const [currentCut, setCurrentCut] = useState(
+    isCurrentCut(new Date(), notification.groupedPlanificacion!)
+  );
 
-  function getTotalHours(values: DetallePlanificacion[]): number {
-    return values.reduce((acc, value) => {
-      const start = value.horaDesde.split(":");
-      const end = value.horaHasta.split(":");
-      const startHour = parseInt(start[0], 10);
-      const startMinute = parseInt(start[1], 10);
-      let endHour = parseInt(end[0], 10);
-      const endMinute = parseInt(end[1], 10);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      setNearestCutDate(getNearestCutDate(notification.groupedPlanificacion!));
+      setCurrentCut(isCurrentCut(now, notification.groupedPlanificacion!));
+    }, 60000); // Actualiza cada minuto (60000 ms)
 
-      const startDate = new Date();
-      startDate.setHours(startHour, startMinute, 0, 0);
-
-      const endDate = new Date();
-      // Si el fin es a medianoche "00:00", lo ajustamos a las 24 horas
-      if (endHour === 0 && endMinute === 0) {
-        endHour = 24;
-      }
-
-      // Si la hora de fin es menor que la de inicio, significa que cruza la medianoche
-      if (endHour < startHour) {
-        endDate.setDate(endDate.getDate() + 1); // Avanzar un día
-      }
-
-      endDate.setHours(endHour, endMinute, 0, 0);
-
-      const diff = endDate.getTime() - startDate.getTime();
-      const hours = diff / (1000 * 60 * 60);
-
-      return acc + hours;
-    }, 0);
-  }
-  function getNearestCutDate(
-    groupedValues: GroupedPlanificacion[]
-  ): Date | null {
-    const now = new Date();
-
-    // Mapea todas las fechas de corte incluyendo horaDesde y crea Date objects
-    const upcomingCuts = groupedValues.flatMap((group) =>
-      group.values.map((value) => {
-        const [hora, minuto] = value.horaDesde.split(":").map(Number);
-        const cutDate = new Date(group.date); // Usamos la fecha original
-        cutDate.setHours(hora, minuto, 0, 0); // Ajustamos las horas del corte
-        return cutDate;
-      })
-    );
-
-    // Filtra solo las fechas de corte que son futuras
-    const futureCuts = upcomingCuts.filter((cutDate) => cutDate > now);
-
-    // Si no hay cortes futuros, devuelve null
-    if (futureCuts.length === 0) return null;
-
-    // Encuentra el corte más cercano
-    const nearestCut = futureCuts.reduce((nearest, cutDate) => {
-      return cutDate < nearest ? cutDate : nearest;
-    });
-
-    // nearestCut.setHours(nearestCut.getHours() - 6, 0, 0);
-    // Devuelve la fecha y hora del corte más cercano
-    return nearestCut;
-  }
+    return () => clearInterval(interval); // Limpia el intervalo cuando el componente se desmonta
+  }, [notification.groupedPlanificacion]);
 
   return (
     <Card key={notification.cuentaContrato}>
       <CardHeader>
-        <CardTitle>Contrato {notification.cuentaContrato}</CardTitle>
+        <CardTitle className="flex justify-between">
+          <span>Contrato {notification.cuentaContrato}</span>
+          <span>
+            <Lightbulb currentCut={currentCut}></Lightbulb>
+          </span>
+        </CardTitle>
         <div className="text-sm text-muted-foreground">
           <span className="flex flex-col gap-1">
             <span>Alimentador: {notification.alimentador}</span>
             <span>Dirección: {notification.direccion}</span>
             <span>Código único: {notification.cuen}</span>
             <span>
-              <Badge variant="destructive">
+              <Badge variant="destructive" className="text-md">
                 <span className="text-center">
                   <span className="mr-1">Próximo corte en</span>
                   {/* Usamos span en lugar de p */}
@@ -103,9 +65,7 @@ export default function ScheduleCard({
                       threshold="P0S"
                       className="ml-1"
                       lang="es"
-                      datetime={getNearestCutDate(
-                        notification.groupedPlanificacion!
-                      )?.toISOString()}
+                      datetime={nearestCutDate?.cutDateFrom?.toISOString()}
                       format="duration"
                       precision="minute"
                     ></relative-time>
@@ -142,23 +102,22 @@ export default function ScheduleCard({
               </CardHeader>
               <CardContent className="grid grid-cols-2 gap-x-1 gap-y-2 md:gap-x-2 md:gap-y-2">
                 {detail.values.map((value, index) => (
-                  <div
-                    className="border rounded-md flex justify-between"
-                    key={`group-${index}`}
+                  <Badge
+                    key={`schedule-${index}`}
+                    variant={
+                      nearestCutDate?.cutDateFrom?.toISOString() ===
+                      value.cutDateFrom?.toISOString()
+                        ? "destructive"
+                        : "outline"
+                    }
+                    className="text-sm"
                   >
-                    <span className=" flex-grow text-center">
+                    <span className=" flex-grow text-center ">
                       {value.horaDesde}-{value.horaHasta}
                     </span>
-                  </div>
+                  </Badge>
                 ))}
               </CardContent>
-
-              {/* {detail.values.map((value, index) => (
-              <CardContent key={`group-${index}`}>
-                Desde: {value.horaDesde} <br />
-                Hasta: {value.horaHasta}
-              </CardContent>
-            ))} */}
             </Card>
           ))}
         </section>

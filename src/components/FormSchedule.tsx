@@ -11,18 +11,30 @@ import IdTypeSelect from "./IdTypeSelect";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import type { GroupedPlanificacion } from "@/interfaces/grouped-planification";
 import { parseDateString } from "@/lib/utils";
 import ScheduleCard from "./ScheduleCard";
 import Spinner from "./SpinnerLoading";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { Badge } from "./ui/badge";
 import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
 
 export default function FormSchedule() {
   const [idValue, setIdValue] = useLocalStorage<string>("idValue", "", false);
   const [idType, setIdType] = useLocalStorage<IdType>("idType", IdType.Ci);
+  const [backUpIdValue, setBackUpIdValue] = useLocalStorage<string | null>(
+    "backUpIdValue",
+    null
+  );
+  const [lastSuccess, setLastSuccess] = useLocalStorage<string | null>(
+    "lastSuccess",
+    null
+  );
+  const [backUpSchedule, setBackUpSchedule] =
+    useLocalStorage<ScheduleResponse | null>("backUpSchedule", null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorCnelep, setErrorCnelep] = useState<boolean>(false);
   const [schedule, setSchedule] = useState<ScheduleResponse | null>(null);
   const inputRef = useRef<HTMLInputElement>(null); // Creamos la referencia
 
@@ -52,15 +64,24 @@ export default function FormSchedule() {
       const { fechaCorte, fechaHoraCorte } = item;
 
       // Parse the date using fechaHoraCorte
-      const date = parseDateString(fechaHoraCorte);
-      date.setHours(+item.horaDesde.split(":")[0]);
+      const dateFrom = parseDateString(fechaHoraCorte);
+      const dateTo = new Date(dateFrom);
+      const [hourFrom, minuteFrom] = item.horaDesde.split(":").map(Number);
+      let [hourTo, minuteTo] = item.horaHasta.split(":").map(Number);
+      dateFrom.setHours(hourFrom, minuteFrom, 0, 0);
 
-      item.cutDate = date;
+      item.cutDateFrom = dateFrom;
+
+      if (hourTo == 0) {
+        hourTo = 24;
+      }
+      dateTo.setHours(hourTo, minuteTo, 0, 0);
+      item.cutDateTo = dateTo;
 
       if (!map.has(fechaCorte)) {
         map.set(fechaCorte, {
           fechaCorte,
-          date,
+          date: dateFrom,
           values: [item],
         });
       } else {
@@ -80,6 +101,9 @@ export default function FormSchedule() {
   ) => {
     event?.preventDefault();
     setLoading(true);
+    setErrorCnelep(false);
+    setError(null);
+
     try {
       // Guardar en localStorage
       const requestIdValue = idValueEntered ?? idValue;
@@ -90,7 +114,7 @@ export default function FormSchedule() {
 
       // Crear un controlador para abortar la petición si excede el tiempo de espera
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 7000); // 10 segundos
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos
 
       // Hacer la petición HTTP
       const response = await fetch(
@@ -104,6 +128,8 @@ export default function FormSchedule() {
         console.error("Network response was not ok");
         throw new Error("Network response was not ok");
       }
+      // Si la petición es exitosa, limpiar el error
+      setErrorCnelep(false);
 
       const data = (await response.json()) as ScheduleResponse;
       if (data.resp === "ERROR") {
@@ -113,18 +139,19 @@ export default function FormSchedule() {
         );
         return;
       } else {
+        setBackUpIdValue(requestIdValue);
+        setBackUpSchedule(data);
         setSchedule(mapResponse(data));
         setError(null);
+        setLastSuccess(new Date().toISOString());
       }
     } catch (error: any) {
-      // if (error.name === "AbortError") {
-      //   setError("Tiempo de espera excedido para la solicitud");
-      // } else {
-      //   setError("Servicio de CNEL EP actualmente no disponible");
-      // }
+      // Error de CNEL EP
       setError(
-        "Servicio de CNEL EP actualmente no disponible. Intente más tarde por favor."
+        "El Servicio de CNEL EP actualmente no está disponible lamentablemente. Intente más tarde por favor."
       );
+
+      setErrorCnelep(true);
 
       console.error("Error during search request:", error);
       setLoading(false);
@@ -137,14 +164,27 @@ export default function FormSchedule() {
       handleSubmit();
     }
   }, []);
+
+  useEffect(() => {
+    if (backUpSchedule && idValue === backUpIdValue) {
+      setSchedule(mapResponse(backUpSchedule));
+    } else {
+      setSchedule(null);
+    }
+  }, [errorCnelep]);
+
   const handleClear = () => {
     setIdValue("", false); // Limpiamos el valor
     inputRef.current?.focus(); // Enfocamos el input
   };
   // Función handleFocus definida fuera del useEffect
   const handleFocus = () => {
-    const idValueEntered = JSON.parse(localStorage.getItem("idValue") ?? "");
-    const idTypeEntered = JSON.parse(localStorage.getItem("idType") ?? "");
+    const idValueEntered = localStorage.getItem("idValue")
+      ? JSON.parse(localStorage.getItem("idValue") as string)
+      : null;
+    const idTypeEntered = localStorage.getItem("idType")
+      ? JSON.parse(localStorage.getItem("idType") as string)
+      : null;
 
     if (
       idValueEntered &&
@@ -185,7 +225,7 @@ export default function FormSchedule() {
               const value = e.target.value;
               // Validar que solo se ingresen números
               if (/^\d*$/.test(value)) {
-                setIdValue(value, true); // No guardar en localStorage en el onChange
+                setIdValue(value, false); // No guardar en localStorage en el onChange
               }
             }}
             // No guardar en localStorage en el onChange
@@ -218,45 +258,90 @@ export default function FormSchedule() {
         </Button>
       </form>
       <section className="mt-4">
-        {error ? (
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        ) : (
-          <>
-            <Carousel
-              opts={{
-                align: "start",
-              }}
-              className="w-full md:hidden block"
-            >
-              <CarouselContent>
-                {schedule?.notificaciones?.map((notification, index) => (
-                  <CarouselItem
-                    key={index}
-                    className={`${
-                      schedule.notificaciones?.length! > 1
-                        ? "basis-[86%]"
-                        : "basis-[100%]"
-                    } `}
-                  >
-                    <ScheduleCard notification={notification} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              {/* <CarouselPrevious />
-            <CarouselNext /> */}
-            </Carousel>
+        <div className="flex flex-col gap-2 mb-2">
+          {error && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle className="text-red-500">
+                {errorCnelep ? "Servicio no disponible" : "Error"}
+              </AlertTitle>
+              <AlertDescription className="dark:text-white text-red-500">
+                {error}
+              </AlertDescription>
+            </Alert>
+          )}
 
-            <section className="md:grid grid-cols-1 gap-4 hidden ">
-              {schedule?.notificaciones?.map((notification, index) => (
-                <ScheduleCard key={index} notification={notification} />
-              ))}
-            </section>
-          </>
-        )}
+          <Badge variant="secondary" className="text-sm">
+            {errorCnelep ? (
+              <span>
+                La información mostrada abajo es la última disponible antes de
+                la caída del servicio de CNEL. Actualizado{" "}
+                <relative-time
+                  datetime={lastSuccess!}
+                  format="relative"
+                  precision="minute"
+                  lang="es"
+                ></relative-time>
+              </span>
+            ) : (
+              <span>
+                Última actualización:{" "}
+                <relative-time
+                  datetime={lastSuccess!}
+                  lang="es"
+                ></relative-time>
+              </span>
+            )}
+
+            {/* 
+
+
+            {errorCnelep
+              ? "La información mostrada abajo es la última disponible antes de la caída del servicio. Ultima actualización hace " +
+                (lastSuccess ? new Date(lastSuccess).toLocaleString() : "Nunca")
+              : "Última actualización: " +
+                (lastSuccess
+                  ? new Date(lastSuccess).toLocaleString()
+                  : "Nunca")} */}
+          </Badge>
+        </div>
+
+        {/* <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>
+              {errorCnelep ? "Servicio no disponible" : "Error"}
+            </AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert> */}
+        <Carousel
+          opts={{
+            align: "start",
+          }}
+          className="w-full md:hidden block"
+        >
+          <CarouselContent>
+            {schedule?.notificaciones?.map((notification, index) => (
+              <CarouselItem
+                key={index}
+                className={`${
+                  schedule.notificaciones?.length! > 1
+                    ? "basis-[86%]"
+                    : "basis-[100%]"
+                } `}
+              >
+                <ScheduleCard notification={notification} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          {/* <CarouselPrevious />
+            <CarouselNext /> */}
+        </Carousel>
+
+        <section className="md:grid grid-cols-1 gap-4 hidden ">
+          {schedule?.notificaciones?.map((notification, index) => (
+            <ScheduleCard key={index} notification={notification} />
+          ))}
+        </section>
       </section>
     </>
   );
