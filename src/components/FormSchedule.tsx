@@ -149,7 +149,7 @@ export default function FormSchedule() {
     } catch (error: any) {
       // Error de CNEL EP
       setError(
-        "El Servicio de CNEL EP actualmente no está disponible lamentablemente. Intente más tarde por favor."
+        "El Servicio de CNEL EP actualmente no está disponible. Intente más tarde por favor."
       );
 
       setErrorCnelep(true);
@@ -271,40 +271,42 @@ export default function FormSchedule() {
               </AlertDescription>
             </Alert>
           )}
+          {lastSuccess && (
+            <Badge variant="secondary" className="text-sm">
+              {errorCnelep ? (
+                <span>
+                  La información mostrada abajo es la última disponible antes de
+                  la caída del servicio de CNEL.
+                  {/* Actualizado{" "}
+                  <relative-time
+                    datetime={lastSuccess!}
+                    format="relative"
+                    precision="minute"
+                    lang="es"
+                  ></relative-time> */}
+                </span>
+              ) : (
+                <span>
+                  Última actualización:{" "}
+                  <relative-time
+                    datetime={lastSuccess!}
+                    lang="es"
+                  ></relative-time>
+                </span>
+              )}
 
-          <Badge variant="secondary" className="text-sm">
-            {errorCnelep ? (
-              <span>
-                La información mostrada abajo es la última disponible antes de
-                la caída del servicio de CNEL. Actualizado{" "}
-                <relative-time
-                  datetime={lastSuccess!}
-                  format="relative"
-                  precision="minute"
-                  lang="es"
-                ></relative-time>
-              </span>
-            ) : (
-              <span>
-                Última actualización:{" "}
-                <relative-time
-                  datetime={lastSuccess!}
-                  lang="es"
-                ></relative-time>
-              </span>
-            )}
-
-            {/* 
-
-
-            {errorCnelep
-              ? "La información mostrada abajo es la última disponible antes de la caída del servicio. Ultima actualización hace " +
-                (lastSuccess ? new Date(lastSuccess).toLocaleString() : "Nunca")
-              : "Última actualización: " +
-                (lastSuccess
-                  ? new Date(lastSuccess).toLocaleString()
-                  : "Nunca")} */}
-          </Badge>
+              {/* 
+  
+  
+              {errorCnelep
+                ? "La información mostrada abajo es la última disponible antes de la caída del servicio. Ultima actualización hace " +
+                  (lastSuccess ? new Date(lastSuccess).toLocaleString() : "Nunca")
+                : "Última actualización: " +
+                  (lastSuccess
+                    ? new Date(lastSuccess).toLocaleString()
+                    : "Nunca")} */}
+            </Badge>
+          )}
         </div>
         <Carousel
           opts={{
