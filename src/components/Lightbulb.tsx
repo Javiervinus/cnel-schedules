@@ -47,13 +47,17 @@ export default function Lightbulb({ currentCut }: Props) {
                 <span>
                   ¡Parece que no tienes luz! El corte empezó a las{" "}
                   {currentCut.horaDesde} y terminará a las{" "}
-                  {currentCut.horaHasta}. Quedan
+                  {currentCut.horaHasta}. La electricidad debería volver en{" "}
                   <relative-time
                     lang="es"
+                    tense="future"
+                    threshold="P0S"
+                    className="ml-1"
+                    format="duration"
+                    precision="minute"
                     datetime={currentCut.cutDateTo?.toISOString()}
                   ></relative-time>
-                  minutos para que vuelva la electricidad… si todo va según lo
-                  planeado
+                  … si todo va según lo planeado.
                 </span>
               ) : (
                 <span>
@@ -84,16 +88,39 @@ export default function Lightbulb({ currentCut }: Props) {
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>Edit profile</DrawerTitle>
+          <DrawerTitle>
+            {currentCut ? "Posiblemente sin luz 🤡" : "Posiblemente con luz 💡"}
+          </DrawerTitle>
           <DrawerDescription>
-            Make changes to your profile here. Click save when you're done.
+            {currentCut ? (
+              <span>
+                ¡Parece que no tienes luz! El corte empezó a las{" "}
+                {currentCut.horaDesde} y terminará a las {currentCut.horaHasta}.
+                La electricidad debería volver en{" "}
+                <relative-time
+                  lang="es"
+                  tense="future"
+                  threshold="P0S"
+                  className="ml-1"
+                  format="duration"
+                  precision="minute"
+                  datetime={currentCut.cutDateTo?.toISOString()}
+                ></relative-time>
+                … si todo va según lo planeado.
+              </span>
+            ) : (
+              <span>
+                Los horarios de CNEL EP no siempre son exactos. Podrías tener
+                luz… o quizá no. ¡Mejor prepárate por si acaso!
+              </span>
+            )}
           </DrawerDescription>
         </DrawerHeader>
-        asdasd
+
         {/* <ProfileForm className="px-4" /> */}
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">Ok</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

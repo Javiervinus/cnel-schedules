@@ -29,6 +29,10 @@ export default function ScheduleCard({
   const [currentCut, setCurrentCut] = useState(
     isCurrentCut(new Date(), notification.groupedPlanificacion!)
   );
+  useEffect(() => {
+    setNearestCutDate(getNearestCutDate(notification.groupedPlanificacion!));
+    setCurrentCut(isCurrentCut(new Date(), notification.groupedPlanificacion!));
+  }, [notification]);
 
   useEffect(() => {
     const interval = setInterval(() => {
