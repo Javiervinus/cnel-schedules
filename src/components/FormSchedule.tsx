@@ -276,14 +276,14 @@ export default function FormSchedule() {
               {errorCnelep ? (
                 <span>
                   La información mostrada abajo es la última disponible antes de
-                  la caída del servicio de CNEL.
-                  {/* Actualizado{" "}
+                  la caída del servicio de CNEL, que fue{" "}
                   <relative-time
                     datetime={lastSuccess!}
                     format="relative"
                     precision="minute"
                     lang="es"
-                  ></relative-time> */}
+                  ></relative-time>
+                  .
                 </span>
               ) : (
                 <span>
