@@ -49,7 +49,7 @@ export default function ScheduleCard({
       <CardHeader>
         <CardTitle className="flex justify-between">
           <span>Contrato {notification.cuentaContrato}</span>
-          <span>
+          <span className="cursor-pointer">
             <Lightbulb currentCut={currentCut}></Lightbulb>
           </span>
         </CardTitle>

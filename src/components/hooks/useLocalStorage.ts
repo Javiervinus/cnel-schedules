@@ -1,20 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function useLocalStorage<T>(
   key: string,
   defaultValue: T,
-
-  saveToLocalStorage: boolean = true // Añadido un flag para controlar si guarda en localStorage
+  saveToLocalStorage: boolean = true
 ) {
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    try {
-      const item = localStorage.getItem(key);
-      return item ? (JSON.parse(item) as T) : defaultValue;
-    } catch (error) {
-      console.error(`Error reading localStorage key "${key}":`, error);
-      return defaultValue;
+  const [storedValue, setStoredValue] = useState<T>(defaultValue);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const item = localStorage.getItem(key);
+        if (item) {
+          setStoredValue(JSON.parse(item) as T);
+        }
+      } catch (error) {
+        console.error(`Error reading key "${key}" from localStorage:`, error);
+      }
     }
-  });
+  }, [key]);
 
   const setValue = (
     value: T | ((val: T) => T),
@@ -25,12 +29,11 @@ function useLocalStorage<T>(
         value instanceof Function ? value(storedValue) : value;
       setStoredValue(valueToStore);
 
-      // Solo guarda en localStorage si save es true
-      if (save) {
+      if (save && typeof window !== "undefined" && saveToLocalStorage) {
         localStorage.setItem(key, JSON.stringify(valueToStore));
       }
     } catch (error) {
-      console.error(`Error setting localStorage key "${key}":`, error);
+      console.error(`Error setting key "${key}" in localStorage:`, error);
     }
   };
 

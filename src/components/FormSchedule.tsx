@@ -4,7 +4,7 @@ import type {
   DetallePlanificacion,
   ScheduleResponse,
 } from "@/interfaces/schedule-response";
-import { AlertCircle, Search, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { IdType } from "../constants/idTypes";
 import useLocalStorage from "./hooks/useLocalStorage";
 import IdTypeSelect from "./IdTypeSelect";
@@ -13,15 +13,13 @@ import { Input } from "./ui/input";
 
 import type { GroupedPlanificacion } from "@/interfaces/grouped-planification";
 import { parseDateString } from "@/lib/utils";
-import ScheduleCard from "./ScheduleCard";
+import ScheduleDisplay from "./ScheduleDisplay";
 import Spinner from "./SpinnerLoading";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
-import { Badge } from "./ui/badge";
-import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
 
 export default function FormSchedule() {
-  const [idValue, setIdValue] = useLocalStorage<string>("idValue", "", false);
+  const [idValue, setIdValue] = useLocalStorage<string>("idValue", "", true);
   const [idType, setIdType] = useLocalStorage<IdType>("idType", IdType.Ci);
+  const [idValueLoaded, setIdValueLoaded] = useState(false);
   const [backUpIdValue, setBackUpIdValue] = useLocalStorage<string | null>(
     "backUpIdValue",
     null
@@ -37,6 +35,26 @@ export default function FormSchedule() {
   const [errorCnelep, setErrorCnelep] = useState<boolean>(false);
   const [schedule, setSchedule] = useState<ScheduleResponse | null>(null);
   const inputRef = useRef<HTMLInputElement>(null); // Creamos la referencia
+  const initialRender = useRef(true);
+
+  // Efecto para detectar cuando `idValue` ha sido actualizado desde `localStorage`
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Solo ejecutamos este código en el cliente
+      setIdValueLoaded(true);
+    }
+  }, []);
+  useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false;
+      return;
+    }
+
+    // Si `idValue` ha sido cargado y no está vacío, ejecutamos `handleSubmit`
+    if (idValueLoaded && idValue !== "") {
+      handleSubmit();
+    }
+  }, [idValueLoaded]);
 
   function mapResponse(data: ScheduleResponse): ScheduleResponse {
     const mappedData = data.notificaciones?.map((notificacion) => {
@@ -160,11 +178,13 @@ export default function FormSchedule() {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    if (idValue !== "" && idType) {
-      handleSubmit();
-    }
-  }, []);
+  // useEffect(() => {
+  //   console.log("idValue", idValue);
+  //   console.log("idType", idType);
+  //   if (idValue !== "" && idType) {
+  //     handleSubmit();
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (backUpSchedule && idValue === backUpIdValue) {
@@ -174,6 +194,13 @@ export default function FormSchedule() {
     }
   }, [errorCnelep]);
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Validate that only numbers are entered
+    if (/^\d*$/.test(value)) {
+      setIdValue(value, false); // 'false' to not save to localStorage on input change
+    }
+  };
   const handleClear = () => {
     setIdValue("", false); // Limpiamos el valor
     inputRef.current?.focus(); // Enfocamos el input
@@ -222,13 +249,7 @@ export default function FormSchedule() {
             placeholder="Identificación"
             value={idValue}
             pattern="\d*"
-            onChange={(e) => {
-              const value = e.target.value;
-              // Validar que solo se ingresen números
-              if (/^\d*$/.test(value)) {
-                setIdValue(value, false); // No guardar en localStorage en el onChange
-              }
-            }}
+            onChange={handleInputChange}
             // No guardar en localStorage en el onChange
             required
           />
@@ -258,86 +279,12 @@ export default function FormSchedule() {
           </span>
         </Button>
       </form>
-      <section className="mt-4">
-        <div className="flex flex-col gap-2 mb-2">
-          {error && (
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertTitle className="text-red-500">
-                {errorCnelep ? "Servicio no disponible" : "Error"}
-              </AlertTitle>
-              <AlertDescription className="dark:text-white text-red-500">
-                {error}
-              </AlertDescription>
-            </Alert>
-          )}
-          {lastSuccess && (
-            <Badge variant="secondary" className="text-sm">
-              {errorCnelep ? (
-                <span>
-                  La información mostrada abajo es la última disponible antes de
-                  la caída del servicio de CNEL, que fue{" "}
-                  <relative-time
-                    datetime={lastSuccess!}
-                    format="relative"
-                    precision="minute"
-                    lang="es"
-                  ></relative-time>
-                  .
-                </span>
-              ) : (
-                <span>
-                  Última actualización:{" "}
-                  <relative-time
-                    datetime={lastSuccess!}
-                    lang="es"
-                  ></relative-time>
-                </span>
-              )}
-
-              {/* 
-  
-  
-              {errorCnelep
-                ? "La información mostrada abajo es la última disponible antes de la caída del servicio. Ultima actualización hace " +
-                  (lastSuccess ? new Date(lastSuccess).toLocaleString() : "Nunca")
-                : "Última actualización: " +
-                  (lastSuccess
-                    ? new Date(lastSuccess).toLocaleString()
-                    : "Nunca")} */}
-            </Badge>
-          )}
-        </div>
-        <Carousel
-          opts={{
-            align: "start",
-          }}
-          className="w-full md:hidden block"
-        >
-          <CarouselContent>
-            {schedule?.notificaciones?.map((notification, index) => (
-              <CarouselItem
-                key={index}
-                className={`${
-                  schedule.notificaciones?.length! > 1
-                    ? "basis-[86%]"
-                    : "basis-[100%]"
-                } `}
-              >
-                <ScheduleCard notification={notification} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          {/* <CarouselPrevious />
-            <CarouselNext /> */}
-        </Carousel>
-
-        <section className="md:grid grid-cols-1 gap-4 hidden ">
-          {schedule?.notificaciones?.map((notification, index) => (
-            <ScheduleCard key={index} notification={notification} />
-          ))}
-        </section>
-      </section>
+      <ScheduleDisplay
+        error={error}
+        errorCnelep={errorCnelep}
+        lastSuccess={lastSuccess}
+        schedule={schedule}
+      />
     </>
   );
 }
