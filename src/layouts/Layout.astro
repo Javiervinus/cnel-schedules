@@ -30,6 +30,8 @@ const { title } = Astro.props;
     <meta name="author" content="Javier Vinueza" />
 
     <!-- Open Graph -->
+    <meta property="og:site_name" content="Horarios CNEL Ecuador" />
+
     <meta property="og:title" content="Horarios CNEL - Cortes de Luz Ecuador" />
     <meta
       property="og:description"
@@ -39,6 +41,11 @@ const { title } = Astro.props;
       property="og:image"
       content={import.meta.env.SITE + "/images/cnel-schedule-og.jpg"}
     />
+    <meta
+      name="keywords"
+      content="cortes de luz, CNEL, Ecuador, horarios cortes de luz, energía eléctrica, planificación, servicio eléctrico CNEL, cortes de energía, luz, Ecuador 2024"
+    />
+
     <meta property="og:url" content={import.meta.env.SITE} />
     <meta property="og:type" content="website" />
 
