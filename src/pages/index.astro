@@ -36,10 +36,14 @@ import Appbar from "@/components/Appbar.astro";
     <Appbar />
 
     <main class="flex justify-center items-center flex-col">
-      <div class="max-w-full w-full md:max-w-screen-lg px-6 py-4">
-        <!-- <h1 class="text-3xl font-medium text-center mb-3">
+      <div class="max-w-full w-full md:max-w-screen-lg px-6 pt-0 py-4">
+        <h1 class="text-3xl font-medium text-start mb-3">
           Horarios <span class="text-[#2364B0]">CNEL</span>
-        </h1> -->
+        </h1>
+        <p class="mb-4">
+          Ingresa tu identificación para consultar los horarios de cortes de luz
+          programados por CNEL en tu área.
+        </p>
         <FormSchedule client:load />
       </div>
     </main>

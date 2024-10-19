@@ -243,7 +243,13 @@ export default function FormSchedule() {
         className="grid grid-cols-7 md:grid-cols-5 gap-2 w-full"
       >
         <div className="col-span-3 md:col-span-2 relative">
+          <label htmlFor="identificacion" className="sr-only">
+            Identificación
+          </label>
+
           <Input
+            id="identificacion"
+            name="identificacion"
             ref={inputRef}
             inputMode="numeric"
             placeholder="Identificación"

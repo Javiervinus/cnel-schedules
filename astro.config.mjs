@@ -6,6 +6,8 @@ import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import vercel from "@astrojs/vercel/static";
 
+import sitemap from "@astrojs/sitemap";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://cnel-schedules.vercel.app",
@@ -18,5 +20,6 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
     react(),
+    sitemap(),
   ],
 });
