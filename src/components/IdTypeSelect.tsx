@@ -18,7 +18,10 @@ export default function IdTypeSelect({ idType, setIdType }: IdTypeSelectProps) {
   return (
     <Select value={idType} onValueChange={setIdType}>
       <SelectTrigger>
-        <SelectValue placeholder="Seleccione un tipo de identificación" />
+        <SelectValue
+          aria-label="Tipo de identificación"
+          placeholder="Seleccione un tipo de identificación"
+        />
       </SelectTrigger>
       <SelectContent>
         {idTypes.map((type) => (

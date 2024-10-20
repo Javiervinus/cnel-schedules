@@ -264,8 +264,10 @@ export default function FormSchedule() {
             variant="ghost"
             className="absolute right-0 top-0"
             onClick={handleClear}
+            aria-label="Limpiar"
           >
             <X size={16} strokeWidth={0.7}></X>
+            <span className="sr-only">Limpiar</span>
           </Button>
         </div>
         <div className="col-span-3 md:col-span-2">
@@ -275,6 +277,7 @@ export default function FormSchedule() {
         <Button
           className="col-span-1 md:col-span-1 w-full"
           type="submit"
+          aria-label="Buscar horarios"
           disabled={loading || idValue === ""}
         >
           <span className="hidden md:block">
@@ -283,6 +286,7 @@ export default function FormSchedule() {
           <span className="block md:hidden">
             {loading ? <Spinner /> : <Search size={15} />}
           </span>
+          <span className="sr-only">Buscar horarios</span>
         </Button>
       </form>
       <ScheduleDisplay
