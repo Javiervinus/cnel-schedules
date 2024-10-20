@@ -126,7 +126,10 @@ export default function ScheduleCard({
             onClick={() =>
               handleShareAsImage({
                 hiddenContentRef,
-                fileName: "schedule.png",
+                fileName: `horarios-cnel-${formatDate(
+                  firstDate,
+                  false
+                )}-${formatDate(lastDate, false)}.png`,
                 title: "Horarios CNEL",
                 text: `Horarios desde el ${formatDate(
                   firstDate,
@@ -138,12 +141,14 @@ export default function ScheduleCard({
             aria-label="Compartir horario"
           >
             <Share className="mr-2" size={15} />
-            Compartir horario
+            Compartir todo el horario
             <Badge variant="default" className="ml-2 ">
               Nuevo
               <Sparkles className="ml-1" size={9} />
             </Badge>
-            <span className="sr-only">compartir horario como imagen</span>
+            <span className="sr-only">
+              compartir todo el horario como imagen
+            </span>
           </Button>
         </div>
         <section className="grid gird-cols-2  md:grid-cols-2 lg:grid-cols-3 gap-3">

@@ -59,7 +59,10 @@ export default function GroupedDateSchedule({
                   hiddenContentRef,
                   title: `Horario CNEL`,
                   text: `Horario de corte del ${formatDate(detail.date)}`,
-                  fileName: `horario-corte-${formatDate(detail.date)}.png`,
+                  fileName: `horario-corte-${formatDate(
+                    detail.date,
+                    false
+                  )}.png`,
                 })
               }
             >
