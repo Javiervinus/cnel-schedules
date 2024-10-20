@@ -19,11 +19,14 @@ export function parseDateString(dateStr: string): Date {
   // Create a new Date object (months are zero-indexed in JavaScript)
   return new Date(year, month - 1, day);
 }
-export function formatDate(value: Date): string {
+export function formatDate(value?: Date | null, weekday = true): string {
+  if (!value) {
+    return "";
+  }
   const date = new Date(value);
 
   return new Intl.DateTimeFormat("es-ES", {
-    weekday: "long",
+    weekday: weekday ? "long" : undefined,
     day: "numeric",
     month: "long",
   }).format(date);
