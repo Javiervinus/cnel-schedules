@@ -1,4 +1,6 @@
+import type { ShareFile } from "@/interfaces/share-file";
 import { clsx, type ClassValue } from "clsx";
+import { toPng } from "html-to-image";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -34,3 +36,36 @@ export function formatDate(value?: Date | null, weekday = true): string {
 export function capitalizeFirstLetter(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
+
+export const handleShareAsImage = (shareFileInfo: ShareFile) => {
+  if (shareFileInfo.hiddenContentRef.current === null) return;
+
+  // Genera la imagen como PNG
+  toPng(shareFileInfo.hiddenContentRef.current)
+    .then((dataUrl) => {
+      // Convertimos la imagen a Blob
+      fetch(dataUrl)
+        .then((res) => res.blob())
+        .then((blob) => {
+          // Verificamos si el navegador soporta la Web Share API
+          if (navigator.share) {
+            const file = new File([blob], shareFileInfo.fileName, {
+              type: blob.type,
+            });
+            navigator
+              .share({
+                files: [file], // Compartimos la imagen como archivo
+                title: shareFileInfo.title,
+                text: shareFileInfo.text,
+              })
+              .then(() => console.log("Compartido con éxito"))
+              .catch((error) => console.error("Error al compartir:", error));
+          } else {
+            console.error("El navegador no soporta la Web Share API.");
+          }
+        });
+    })
+    .catch((error) => {
+      console.error("Error al generar la imagen:", error);
+    });
+};
