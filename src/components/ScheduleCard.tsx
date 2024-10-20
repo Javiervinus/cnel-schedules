@@ -126,7 +126,10 @@ export default function ScheduleCard({
             onClick={() =>
               handleShareAsImage({
                 hiddenContentRef,
-                fileName: "schedule.png",
+                fileName: `horarios-cnel-${formatDate(
+                  firstDate,
+                  false
+                )}-${formatDate(lastDate, false)}.png`,
                 title: "Horarios CNEL",
                 text: `Horarios desde el ${formatDate(
                   firstDate,
