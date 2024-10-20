@@ -1,5 +1,8 @@
 import type { GroupedPlanificacion } from "@/interfaces/grouped-planification";
-import type { Notificacion } from "@/interfaces/schedule-response";
+import type {
+  DetallePlanificacion,
+  Notificacion,
+} from "@/interfaces/schedule-response";
 import { getTotalHours } from "@/lib/cut.utils";
 import {
   capitalizeFirstLetter,
@@ -20,9 +23,14 @@ import {
 interface Props {
   detail: GroupedPlanificacion;
   notification: Notificacion;
+  nearestCutDate: DetallePlanificacion | null;
 }
 
-export default function GrupedDateSchedule({ detail, notification }: Props) {
+export default function GroupedDateSchedule({
+  detail,
+  notification,
+  nearestCutDate,
+}: Props) {
   const now = new Date();
   const hiddenContentRef = useRef<HTMLDivElement>(null);
 
@@ -69,7 +77,12 @@ export default function GrupedDateSchedule({ detail, notification }: Props) {
             <Badge
               key={`schedule-${index}`}
               variant={"outline"}
-              className="text-sm px-0 md:px-2.5"
+              className={`text-sm px-0 md:px-2.5       ${
+                nearestCutDate?.cutDateFrom?.toISOString() ===
+                value.cutDateFrom?.toISOString()
+                  ? "border-destructive text-destructive dark:text-white"
+                  : ""
+              }`}
             >
               <span className=" flex-grow text-center ">
                 {value.horaDesde}-{value.horaHasta}
