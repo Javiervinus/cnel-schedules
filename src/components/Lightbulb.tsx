@@ -33,7 +33,28 @@ export default function Lightbulb({ currentCut }: Props) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          {currentCut ? <LightbulbOff color="red" /> : <LightbulbOn />}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute right-2 top-3"
+            aria-label="Ver detalles del corte"
+          >
+            {currentCut ? (
+              <>
+                <LightbulbOff color="red" />
+                <span className="sr-only">
+                  Ver detalles del corte (sin luz)
+                </span>
+              </>
+            ) : (
+              <>
+                <LightbulbOn />
+                <span className="sr-only">
+                  Ver detalles del corte (con luz)
+                </span>
+              </>
+            )}
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -84,7 +105,24 @@ export default function Lightbulb({ currentCut }: Props) {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        {currentCut ? <LightbulbOff color="red" /> : <LightbulbOn />}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute right-2 top-3"
+          aria-label="Ver detalles del corte"
+        >
+          {currentCut ? (
+            <>
+              <LightbulbOff color="red" />
+              <span className="sr-only">Ver detalles del corte (sin luz)</span>
+            </>
+          ) : (
+            <>
+              <LightbulbOn />
+              <span className="sr-only">Ver detalles del corte (con luz)</span>
+            </>
+          )}
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
