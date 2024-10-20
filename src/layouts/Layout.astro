@@ -7,9 +7,11 @@ const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="es-EC">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="Content-Language" content="es-EC" />
+
     <meta
       name="description"
       content="Consulta los horarios actualizados de cortes de luz de CNEL en Ecuador. Mantente informado y planifica tu día con nuestro servicio en línea."
@@ -28,6 +30,7 @@ const { title } = Astro.props;
     <link rel="canonical" href={import.meta.env.SITE} />
 
     <meta name="author" content="Javier Vinueza" />
+    <meta name="application-name" content="Horarios CNEL" />
 
     <!-- Open Graph -->
     <meta property="og:site_name" content="Horarios CNEL Ecuador" />
@@ -125,11 +128,21 @@ const { title } = Astro.props;
     "name": "Horarios CNEL",
     "url": "https://cnel-schedules.vercel.app/",
     "description": "Consulta los horarios actualizados de cortes de luz de CNEL en Ecuador.",
+    "inLanguage": "es-EC",
     "author": {
       "@type": "Person",
       "name": "Javier Vinueza",
       "url": "https://github.com/Javiervinus",
       "sameAs": ["https://www.linkedin.com/in/javier-vinueza-08759a74"]
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Horarios CNEL",
+      "url": "https://cnel-schedules.vercel.app/",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "EC"
+      }
     }
   }
 </script>
