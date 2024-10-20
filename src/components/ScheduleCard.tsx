@@ -13,7 +13,7 @@ import {
 import "@github/relative-time-element";
 import { Share, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import GrupedDateSchedule from "./GrupedDateSchedule";
+import GroupedDateSchedule from "./GroupedDateSchedule";
 import Lightbulb from "./Lightbulb";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -148,10 +148,11 @@ export default function ScheduleCard({
         </div>
         <section className="grid gird-cols-2  md:grid-cols-2 lg:grid-cols-3 gap-3">
           {notification.groupedPlanificacion?.map((detail, index) => (
-            <GrupedDateSchedule
+            <GroupedDateSchedule
               key={`${notification.cuentaContrato}-${detail.fechaCorte}`}
               detail={detail}
               notification={notification}
+              nearestCutDate={nearestCutDate}
             />
           ))}
         </section>
