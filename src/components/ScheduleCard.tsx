@@ -8,7 +8,7 @@ import { capitalizeFirstLetter, formatDate } from "@/lib/utils";
 import { toPng } from "html-to-image";
 
 import "@github/relative-time-element";
-import { Share } from "lucide-react";
+import { Share, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import Lightbulb from "./Lightbulb";
 import { Badge } from "./ui/badge";
@@ -58,7 +58,10 @@ export default function ScheduleCard({
                 .share({
                   files: [file], // Compartimos la imagen como archivo
                   title: "Horarios de cortes",
-                  text: "Aquí tienes los horarios de cortes de luz.",
+                  text: `Horarios desde el ${formatDate(
+                    firstDate,
+                    false
+                  )} hasta el ${formatDate(lastDate, false)}`,
                 })
                 .then(() => console.log("Compartido con éxito"))
                 .catch((error) => console.error("Error al compartir:", error));
@@ -76,11 +79,17 @@ export default function ScheduleCard({
     setNearestCutDate(getNearestCutDate(notification.groupedPlanificacion!));
     setCurrentCut(isCurrentCut(new Date(), notification.groupedPlanificacion!));
 
-    setFirstDate(notification.groupedPlanificacion![0].date);
+    setFirstDate(
+      notification.groupedPlanificacion?.length
+        ? notification.groupedPlanificacion![0].date
+        : null
+    );
     setLastDate(
-      notification.groupedPlanificacion![
-        notification.groupedPlanificacion!.length - 1
-      ].date
+      notification.groupedPlanificacion?.length
+        ? notification.groupedPlanificacion![
+            notification.groupedPlanificacion!.length - 1
+          ].date
+        : null
     );
   }, [notification]);
 
@@ -117,7 +126,10 @@ export default function ScheduleCard({
             <span>Dirección: {notification.direccion}</span>
             <span>Código único: {notification.cuen}</span>
             <span className="mt-2">
-              <Badge variant="destructive" className="text-md">
+              <Badge
+                variant="outline"
+                className="text-md border-destructive text-destructive dark:text-white"
+              >
                 <span className="text-center">
                   <span className="mr-1">Próximo corte en</span>
                   {/* Usamos span en lugar de p */}
@@ -135,18 +147,26 @@ export default function ScheduleCard({
                 </span>
               </Badge>
             </span>
-            <Button
-              variant="outline"
-              onClick={handleShareAsImage}
-              className="mt-2"
-            >
-              <Share className="mr-2" size={15} />
-              Compartir horario completo
-            </Button>
           </span>
         </div>
       </CardHeader>
       <CardContent>
+        <div className="flex w-full mb-2">
+          <Button
+            variant="outline"
+            onClick={handleShareAsImage}
+            className="relative overflow-hidden w-full"
+            aria-label="Compartir horario"
+          >
+            <Share className="mr-2" size={15} />
+            Compartir horario
+            <Badge variant="default" className="ml-2 ">
+              Nuevo
+              <Sparkles className="ml-1" size={9} />
+            </Badge>
+            <span className="sr-only">compartir horario como imagen</span>
+          </Button>
+        </div>
         <section className="grid gird-cols-2  md:grid-cols-2 lg:grid-cols-3 gap-3">
           {notification.groupedPlanificacion?.map((detail, index) => (
             <Card
@@ -174,15 +194,17 @@ export default function ScheduleCard({
                 {detail.values.map((value, index) => (
                   <Badge
                     key={`schedule-${index}`}
-                    variant={
-                      nearestCutDate?.cutDateFrom?.toISOString() ===
-                      value.cutDateFrom?.toISOString()
-                        ? "destructive"
-                        : "outline"
-                    }
-                    className="text-sm px-0 md:px-2.5"
+                    variant="outline"
+                    className={`text-sm px-0 md:px-2.5
+                          ${
+                            nearestCutDate?.cutDateFrom?.toISOString() ===
+                            value.cutDateFrom?.toISOString()
+                              ? "text-destructive border-destructive dark:text-white"
+                              : ""
+                          }
+                      `}
                   >
-                    <span className=" flex-grow text-center ">
+                    <span className={`flex-grow text-center`}>
                       {value.horaDesde}-{value.horaHasta}
                     </span>
                   </Badge>
@@ -199,6 +221,7 @@ export default function ScheduleCard({
             left: "-9999px",
             width: "1500px !important",
           }}
+          className="force-light-mode" // Aplicamos la clase para forzar el modo claro en la captura
         >
           <Card className="w-full" ref={hiddenContentRef}>
             <CardHeader>
