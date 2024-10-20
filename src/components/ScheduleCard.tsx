@@ -4,12 +4,16 @@ import {
   getTotalHours,
   isCurrentCut,
 } from "@/lib/cut.utils";
-import { capitalizeFirstLetter, formatDate } from "@/lib/utils";
-import { toPng } from "html-to-image";
+import {
+  capitalizeFirstLetter,
+  formatDate,
+  handleShareAsImage,
+} from "@/lib/utils";
 
 import "@github/relative-time-element";
 import { Share, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import GrupedDateSchedule from "./GrupedDateSchedule";
 import Lightbulb from "./Lightbulb";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -38,42 +42,6 @@ export default function ScheduleCard({
   const [firstDate, setFirstDate] = useState<Date | null>(null);
   const [lastDate, setLastDate] = useState<Date | null>(null);
   const [diffDays, setDiffDays] = useState<number>(0);
-
-  const handleShareAsImage = () => {
-    if (hiddenContentRef.current === null) return;
-
-    // Genera la imagen como PNG
-    toPng(hiddenContentRef.current)
-      .then((dataUrl) => {
-        // Convertimos la imagen a Blob
-        fetch(dataUrl)
-          .then((res) => res.blob())
-          .then((blob) => {
-            // Verificamos si el navegador soporta la Web Share API
-            if (navigator.share) {
-              const file = new File([blob], "schedule.png", {
-                type: blob.type,
-              });
-              navigator
-                .share({
-                  files: [file], // Compartimos la imagen como archivo
-                  title: "Horarios de cortes",
-                  text: `Horarios desde el ${formatDate(
-                    firstDate,
-                    false
-                  )} hasta el ${formatDate(lastDate, false)}`,
-                })
-                .then(() => console.log("Compartido con éxito"))
-                .catch((error) => console.error("Error al compartir:", error));
-            } else {
-              console.error("El navegador no soporta la Web Share API.");
-            }
-          });
-      })
-      .catch((error) => {
-        console.error("Error al generar la imagen:", error);
-      });
-  };
 
   useEffect(() => {
     setNearestCutDate(getNearestCutDate(notification.groupedPlanificacion!));
@@ -150,11 +118,22 @@ export default function ScheduleCard({
           </span>
         </div>
       </CardHeader>
+
       <CardContent>
         <div className="flex w-full mb-2">
           <Button
             variant="outline"
-            onClick={handleShareAsImage}
+            onClick={() =>
+              handleShareAsImage({
+                hiddenContentRef,
+                fileName: "schedule.png",
+                title: "Horarios CNEL",
+                text: `Horarios desde el ${formatDate(
+                  firstDate,
+                  false
+                )} hasta el ${formatDate(lastDate, false)}`,
+              })
+            }
             className="relative overflow-hidden w-full"
             aria-label="Compartir horario"
           >
@@ -169,48 +148,11 @@ export default function ScheduleCard({
         </div>
         <section className="grid gird-cols-2  md:grid-cols-2 lg:grid-cols-3 gap-3">
           {notification.groupedPlanificacion?.map((detail, index) => (
-            <Card
-              className=" shadow-none relative"
+            <GrupedDateSchedule
               key={`${notification.cuentaContrato}-${detail.fechaCorte}`}
-            >
-              <CardHeader>
-                <CardTitle>
-                  {capitalizeFirstLetter(formatDate(detail.date))}
-                  {detail.date.toDateString() === now.toDateString() && (
-                    <Badge
-                      className="absolute top-0 right-0"
-                      variant="secondary"
-                    >
-                      Hoy
-                    </Badge>
-                  )}
-                </CardTitle>
-                <CardDescription>
-                  {detail.values.length} horarios por{" "}
-                  {getTotalHours(detail.values)} horas
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="grid grid-cols-2 gap-x-1 gap-y-2 md:gap-x-2 md:gap-y-2">
-                {detail.values.map((value, index) => (
-                  <Badge
-                    key={`schedule-${index}`}
-                    variant="outline"
-                    className={`text-sm px-0 md:px-2.5
-                          ${
-                            nearestCutDate?.cutDateFrom?.toISOString() ===
-                            value.cutDateFrom?.toISOString()
-                              ? "text-destructive border-destructive dark:text-white"
-                              : ""
-                          }
-                      `}
-                  >
-                    <span className={`flex-grow text-center`}>
-                      {value.horaDesde}-{value.horaHasta}
-                    </span>
-                  </Badge>
-                ))}
-              </CardContent>
-            </Card>
+              detail={detail}
+              notification={notification}
+            />
           ))}
         </section>
 
