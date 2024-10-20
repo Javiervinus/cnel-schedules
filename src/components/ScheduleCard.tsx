@@ -137,14 +137,14 @@ export default function ScheduleCard({
                 )} hasta el ${formatDate(lastDate, false)}`,
               })
             }
-            className="relative overflow-hidden w-full"
-            aria-label="Compartir horario"
+            className="relative  w-full flex justify-center items-center gap-1 md:gap-2"
+            aria-label="Compartir horario completo como imagen"
           >
-            <Share className="mr-2" size={15} />
+            <Share size={15} />
             Compartir todo el horario
-            <Badge variant="default" className="ml-2 ">
+            <Badge variant="default">
               Nuevo
-              <Sparkles className="ml-1" size={9} />
+              <Sparkles size={9} />
             </Badge>
             <span className="sr-only">
               compartir todo el horario como imagen
