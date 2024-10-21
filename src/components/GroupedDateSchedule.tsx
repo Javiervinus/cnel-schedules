@@ -10,7 +10,8 @@ import {
   handleShareAsImage,
 } from "@/lib/utils";
 import { Share } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import Spinner from "./SpinnerLoading";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import {
@@ -33,6 +34,7 @@ export default function GroupedDateSchedule({
 }: Props) {
   const now = new Date();
   const hiddenContentRef = useRef<HTMLDivElement>(null);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
 
   return (
     <>
@@ -51,23 +53,33 @@ export default function GroupedDateSchedule({
 
             <Button
               className="absolute right-2 top-3"
+              disabled={isLoadingImage}
               variant="ghost"
               size="icon"
               aria-label="Compartir horario de corte"
               onClick={() =>
-                handleShareAsImage({
-                  hiddenContentRef,
-                  title: `Horario CNEL`,
-                  text: `Horario de corte del ${formatDate(detail.date)}`,
-                  fileName: `horario-corte-${formatDate(
-                    detail.date,
-                    false
-                  )}.png`,
-                })
+                handleShareAsImage(
+                  {
+                    hiddenContentRef,
+                    title: `Horario CNEL`,
+                    text: `Horario de corte del ${formatDate(detail.date)}`,
+                    fileName: `horario-corte-${formatDate(
+                      detail.date,
+                      false
+                    )}.png`,
+                  },
+                  setIsLoadingImage
+                )
               }
             >
-              <Share size={16} strokeWidth={0.7}></Share>
-              <span className="sr-only">Compartir</span>
+              {!isLoadingImage ? (
+                <>
+                  <Share size={15} />
+                  <span className="sr-only">Compartir todo el horario</span>
+                </>
+              ) : (
+                <Spinner />
+              )}
             </Button>
           </CardTitle>
           <CardDescription>

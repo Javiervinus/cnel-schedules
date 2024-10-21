@@ -37,8 +37,14 @@ export function capitalizeFirstLetter(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-export const handleShareAsImage = (shareFileInfo: ShareFile) => {
+export const handleShareAsImage = (
+  shareFileInfo: ShareFile,
+  setIsLoadingImage: React.Dispatch<React.SetStateAction<boolean>>
+) => {
   if (shareFileInfo.hiddenContentRef.current === null) return;
+
+  // Inicia el estado de carga
+  setIsLoadingImage(true);
 
   // Genera la imagen como PNG
   toPng(shareFileInfo.hiddenContentRef.current)
@@ -63,9 +69,15 @@ export const handleShareAsImage = (shareFileInfo: ShareFile) => {
           } else {
             console.error("El navegador no soporta la Web Share API.");
           }
+        })
+        .finally(() => {
+          // Finaliza el estado de carga
+          setIsLoadingImage(false);
         });
     })
     .catch((error) => {
       console.error("Error al generar la imagen:", error);
+      // Finaliza el estado de carga en caso de error
+      setIsLoadingImage(false);
     });
 };
