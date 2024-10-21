@@ -15,6 +15,7 @@ import { Share, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import GroupedDateSchedule from "./GroupedDateSchedule";
 import Lightbulb from "./Lightbulb";
+import Spinner from "./SpinnerLoading";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import {
@@ -32,6 +33,7 @@ export default function ScheduleCard({
 }) {
   const now = new Date();
   const hiddenContentRef = useRef<HTMLDivElement>(null);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
 
   const [nearestCutDate, setNearestCutDate] = useState(
     getNearestCutDate(notification.groupedPlanificacion!)
@@ -123,32 +125,42 @@ export default function ScheduleCard({
         <div className="flex w-full mb-2">
           <Button
             variant="outline"
+            disabled={isLoadingImage}
             onClick={() =>
-              handleShareAsImage({
-                hiddenContentRef,
-                fileName: `horarios-cnel-${formatDate(
-                  firstDate,
-                  false
-                )}-${formatDate(lastDate, false)}.png`,
-                title: "Horarios CNEL",
-                text: `Horarios desde el ${formatDate(
-                  firstDate,
-                  false
-                )} hasta el ${formatDate(lastDate, false)}`,
-              })
+              handleShareAsImage(
+                {
+                  hiddenContentRef,
+                  fileName: `horarios-cnel-${formatDate(
+                    firstDate,
+                    false
+                  )}-${formatDate(lastDate, false)}.png`,
+                  title: "Horarios CNEL",
+                  text: `Horarios desde el ${formatDate(
+                    firstDate,
+                    false
+                  )} hasta el ${formatDate(lastDate, false)}`,
+                },
+                setIsLoadingImage
+              )
             }
             className="relative  w-full flex justify-center items-center gap-1 md:gap-2"
             aria-label="Compartir horario completo como imagen"
           >
-            <Share size={15} />
-            Compartir todo el horario
-            <Badge variant="default">
-              Nuevo
-              <Sparkles size={9} />
-            </Badge>
-            <span className="sr-only">
-              compartir todo el horario como imagen
-            </span>
+            {!isLoadingImage ? (
+              <>
+                <Share size={15} />
+                Compartir todo el horario
+                <Badge variant="default">
+                  Nuevo
+                  <Sparkles size={9} />
+                </Badge>
+                <span className="sr-only">
+                  compartir todo el horario como imagen
+                </span>
+              </>
+            ) : (
+              <Spinner />
+            )}
           </Button>
         </div>
         <section className="grid gird-cols-2  md:grid-cols-2 lg:grid-cols-3 gap-3">
