@@ -32,22 +32,33 @@ import Appbar from "@/components/Appbar.astro";
   }
 </script>
 <Layout title="Horarios CNEL - Cortes de Luz Ecuador">
-  <div class="relative flex min-h-screen flex-col bg-background">
+  <section class="relative flex flex-col min-h-screen bg-background">
     <Appbar />
 
-    <main class="flex justify-center items-center flex-col">
-      <div class="max-w-full w-full md:max-w-screen-lg px-6 pt-0 py-4">
-        <h1 class="text-3xl font-medium text-start mb-3">
-          Horarios <span class="text-[#2364B0]">CNEL</span>
-        </h1>
-        <p class="mb-4">
-          Ingresa tu identificación para consultar los horarios de cortes de luz
-          programados por CNEL en tu área.
-        </p>
-        <FormSchedule client:load />
+    <main class="grid grid-cols-12 h-full flex-1">
+      <!-- Sección Izquierda -->
+      <section class="hidden lg:flex lg:col-span-1 overflow-auto justify-start">
+      </section>
+
+      <!-- Contenido Central -->
+      <div class="col-span-12 lg:col-span-10 px-6 pt-0 py-4">
+        <div class="max-w-screen-lg mx-auto">
+          <h1 class="text-3xl font-medium text-start mb-3">
+            Horarios <span class="text-[#2364B0]">CNEL</span>
+          </h1>
+          <p class="mb-4">
+            Ingresa tu identificación para consultar los horarios de cortes de
+            luz programados por CNEL en tu área.
+          </p>
+          <FormSchedule client:load />
+        </div>
       </div>
+
+      <!-- Sección Derecha -->
+      <section class="hidden lg:flex justify-end lg:col-span-1 overflow-auto">
+      </section>
     </main>
+
     <Footer />
-  </div>
-  <!-- <Input /> -->
+  </section>
 </Layout>

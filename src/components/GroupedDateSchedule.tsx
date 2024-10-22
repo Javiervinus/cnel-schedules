@@ -38,13 +38,13 @@ export default function GroupedDateSchedule({
 
   return (
     <>
-      <Card className=" shadow-none relative">
+      <Card className=" shadow-none relative min-h-[9.5rem]">
         <CardHeader>
           <CardTitle>
             {capitalizeFirstLetter(formatDate(detail.date))}
             {detail.date.toDateString() === now.toDateString() && (
               <Badge
-                className="absolute bottom-0 justify-center left-0 w-full"
+                className="absolute bottom-0 justify-center left-0 w-full rounded-t-none"
                 variant="secondary"
               >
                 Hoy
