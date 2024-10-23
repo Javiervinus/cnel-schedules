@@ -1,64 +1,31 @@
 ---
 import FormSchedule from "@/components/FormSchedule";
-import "@/styles/globals.css";
-import Layout from "../layouts/Layout.astro";
 
-import Footer from "@/components/Footer.astro";
-import Appbar from "@/components/Appbar.astro";
+import MainLayout from "@/layouts/MainLayout.astro";
 ---
 
-<script is:inline>
-  const getThemePreference = () => {
-    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
-      return localStorage.getItem("theme");
-    }
-    // return window.matchMedia("(prefers-color-scheme: dark)").matches
-    //   ? "dark"
-    //   : "light";
-    return "light";
-  };
-  const isDark = getThemePreference() === "dark";
-  document.documentElement.classList[isDark ? "add" : "remove"]("dark");
+<MainLayout title="Horarios CNEL - Cortes de Luz Ecuador">
+  <div class="grid grid-cols-12 h-full flex-1">
+    <!-- Sección Izquierda -->
+    <section class="hidden lg:flex lg:col-span-1 overflow-auto justify-start">
+    </section>
 
-  if (typeof localStorage !== "undefined") {
-    const observer = new MutationObserver(() => {
-      const isDark = document.documentElement.classList.contains("dark");
-      localStorage.setItem("theme", isDark ? "dark" : "light");
-    });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-  }
-</script>
-<Layout title="Horarios CNEL - Cortes de Luz Ecuador">
-  <section class="relative flex flex-col min-h-screen bg-background">
-    <Appbar />
-
-    <main class="grid grid-cols-12 h-full flex-1">
-      <!-- Sección Izquierda -->
-      <section class="hidden lg:flex lg:col-span-1 overflow-auto justify-start">
-      </section>
-
-      <!-- Contenido Central -->
-      <div class="col-span-12 lg:col-span-10 px-6 pt-0 py-4">
-        <div class="max-w-screen-lg mx-auto">
-          <h1 class="text-3xl font-medium text-start mb-3">
-            Horarios <span class="text-[#2364B0]">CNEL</span>
-          </h1>
-          <p class="mb-4">
-            Ingresa tu identificación para consultar los horarios de cortes de
-            luz programados por CNEL en tu área.
-          </p>
-          <FormSchedule client:load />
-        </div>
+    <!-- Contenido Central -->
+    <div class="col-span-12 lg:col-span-10 px-6 pt-0 py-4">
+      <div class="max-w-screen-lg mx-auto">
+        <h1 class="text-3xl font-medium text-start mb-3">
+          Horarios <span class="text-[#2364B0]">CNEL</span>
+        </h1>
+        <p class="mb-4">
+          Ingresa tu identificación para consultar los horarios de cortes de luz
+          programados por CNEL en tu área.
+        </p>
+        <FormSchedule client:load />
       </div>
+    </div>
 
-      <!-- Sección Derecha -->
-      <section class="hidden lg:flex justify-end lg:col-span-1 overflow-auto">
-      </section>
-    </main>
-
-    <Footer />
-  </section>
-</Layout>
+    <!-- Sección Derecha -->
+    <section class="hidden lg:flex justify-end lg:col-span-1 overflow-auto">
+    </section>
+  </div>
+</MainLayout>
