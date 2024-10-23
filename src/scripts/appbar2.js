@@ -1,17 +1,10 @@
-export enum CloneMode {
-  CLONE_NODE, // Clonar el nodo completo (por defecto)
-  INNER_HTML, // Usar innerHTML
-  TEXT_CONTENT, // Usar textContent
-}
-export interface ObserveTitleOptions {
-  titleId?: string;
-  appBarTitleId?: string;
-  cloneMode?: CloneMode;
-  removeLeadingIcons?: boolean;
-  maxFontSize?: number;
-  appBarHeight?: number;
-}
-const defaultOptions: ObserveTitleOptions = {
+const CloneMode = {
+  CLONE_NODE: 0, // Clonar el nodo completo (por defecto)
+  INNER_HTML: 1, // Usar innerHTML
+  TEXT_CONTENT: 2, // Usar textContent
+};
+
+const defaultOptions = {
   titleId: "page-title",
   appBarTitleId: "appbar-title",
   cloneMode: CloneMode.CLONE_NODE,
@@ -20,8 +13,7 @@ const defaultOptions: ObserveTitleOptions = {
   appBarHeight: 56,
 };
 
-export function observeTitle(options?: ObserveTitleOptions) {
-  // console.log(options);
+const observeTitle = (options = {}) => {
   const {
     titleId,
     appBarTitleId,
@@ -31,12 +23,11 @@ export function observeTitle(options?: ObserveTitleOptions) {
     appBarHeight,
   } = { ...defaultOptions, ...options };
 
-  const title = document.getElementById(titleId!);
-  const appBarTitle = document.getElementById(appBarTitleId!);
+  const title = document.getElementById(titleId);
+  const appBarTitle = document.getElementById(appBarTitleId);
   const leadingIcons = document.getElementById("leading-actions");
 
   if (!title || !appBarTitle || !leadingIcons) return;
-  // console.log(title, appBarTitle, removeLeadingIcons);
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -58,11 +49,10 @@ export function observeTitle(options?: ObserveTitleOptions) {
           const titleFontSize = parseFloat(
             window.getComputedStyle(title).fontSize
           );
-          // console.log(titleFontSize);
 
           if (cloneMode === CloneMode.CLONE_NODE) {
             // Clonamos el nodo completo con todo el HTML y atributos
-            const clonedTitle = title.cloneNode(true) as HTMLElement;
+            const clonedTitle = title.cloneNode(true);
 
             // Remover márgenes y paddings
             clonedTitle.style.margin = "0";
@@ -70,7 +60,7 @@ export function observeTitle(options?: ObserveTitleOptions) {
             clonedTitle.style.maxWidth = "100%";
 
             // Solo aplicar el tamaño máximo si es mayor que el actual
-            if (titleFontSize > maxFontSize!) {
+            if (titleFontSize > maxFontSize) {
               clonedTitle.style.fontSize = `${maxFontSize}px`;
             }
 
@@ -80,7 +70,7 @@ export function observeTitle(options?: ObserveTitleOptions) {
             appBarTitle.innerHTML = title.innerHTML;
 
             // Solo aplicar el tamaño máximo si es mayor que el actual
-            if (titleFontSize > maxFontSize!) {
+            if (titleFontSize > maxFontSize) {
               appBarTitle.style.fontSize = `${maxFontSize}px`;
             }
           } else if (cloneMode === CloneMode.TEXT_CONTENT) {
@@ -88,9 +78,8 @@ export function observeTitle(options?: ObserveTitleOptions) {
             appBarTitle.textContent = title.textContent;
 
             // Solo aplicar el tamaño máximo si es mayor que el actual
-            if (titleFontSize > maxFontSize!) {
+            if (titleFontSize > maxFontSize) {
               appBarTitle.style.fontSize = `${maxFontSize}px`;
-              // Limitar tamaño de fuente
             }
           }
 
@@ -111,4 +100,4 @@ export function observeTitle(options?: ObserveTitleOptions) {
   );
 
   observer.observe(title);
-}
+};

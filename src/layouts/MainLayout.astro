@@ -70,6 +70,7 @@ const { title } = Astro.props;
       content={import.meta.env.SITE + "/images/cnel-schedule-og.jpg"}
     />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <!-- <script is:inline type="module" src="../scripts/appbar2.js"></script> -->
 
     <title>{title}</title>
     <!-- {
@@ -199,16 +200,19 @@ const { title } = Astro.props;
     applyThemePreference(event.newDocument); // Aplicar el tema al nuevo documento
   });
 </script>
-<script>
-  const { observeTitle } = await import("src/scripts/appbar");
+<script is:inline>
+  const CloneMode = {
+    CLONE_NODE: 0, // Clonar el nodo completo (por defecto)
+    INNER_HTML: 1, // Usar innerHTML
+    TEXT_CONTENT: 2, // Usar textContent
+  };
 
-  document.addEventListener("astro:page-load", async () => {
-    // Usamos import dinámico para cargar el módulo solo cuando sea necesario
-    // const { observeTitle } = await import("./appbar");
-
-    // Ejecutar la función observeTitle después de que la página se haya cargado
-    observeTitle({
-      removeLeadingIcons: true,
-    });
-  });
+  const defaultOptions = {
+    titleId: "page-title",
+    appBarTitleId: "appbar-title",
+    cloneMode: CloneMode.CLONE_NODE,
+    removeLeadingIcons: true,
+    maxFontSize: 18,
+    appBarHeight: 56,
+  };
 </script>
