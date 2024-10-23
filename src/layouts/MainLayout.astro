@@ -1,8 +1,8 @@
 ---
-import Appbar from '@/components/Appbar.astro';
-import Footer from '@/components/Footer.astro';
+import Appbar from "@/components/Appbar.astro";
+import Footer from "@/components/Footer.astro";
 import "@/styles/globals.css";
-import { ViewTransitions } from 'astro:transitions';
+import { ViewTransitions } from "astro:transitions";
 
 interface Props {
   title: string;
@@ -72,7 +72,7 @@ const { title } = Astro.props;
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <title>{title}</title>
-    {
+    <!-- {
       import.meta.env.PROD && (
         <script
           defer
@@ -94,20 +94,18 @@ const { title } = Astro.props;
           })(window, document, "clarity", "script", "olchg88tpg");
       </script>
       )
-    }
+    } -->
 
     <ViewTransitions />
-
   </head>
   <body class="relative">
     <section class="relative flex flex-col min-h-screen bg-background">
       <Appbar />
-  
-      <main >
+
+      <main>
         <slot />
-  
       </main>
-  
+
       <Footer />
     </section>
   </body>
@@ -197,8 +195,20 @@ const { title } = Astro.props;
   }
 
   // Antes de que ocurra el intercambio de documentos, aplicar el tema al nuevo documento
-  document.addEventListener('astro:before-swap', (event) => {
+  document.addEventListener("astro:before-swap", (event) => {
     applyThemePreference(event.newDocument); // Aplicar el tema al nuevo documento
   });
 </script>
+<script>
+  const { observeTitle } = await import("src/scripts/appbar");
 
+  document.addEventListener("astro:page-load", async () => {
+    // Usamos import dinámico para cargar el módulo solo cuando sea necesario
+    // const { observeTitle } = await import("./appbar");
+
+    // Ejecutar la función observeTitle después de que la página se haya cargado
+    observeTitle({
+      removeLeadingIcons: true,
+    });
+  });
+</script>

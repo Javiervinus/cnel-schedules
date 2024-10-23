@@ -29,14 +29,4 @@ import MainLayout from "@/layouts/MainLayout.astro";
     </section>
   </div>
 </MainLayout>
-<script is:inline>
-  document.addEventListener("astro:page-load", async () => {
-    // Usamos import dinámico para cargar el módulo solo cuando sea necesario
-    const { observeTitle } = await import("../../src/utils/appbar");
-
-    // Ejecutar la función observeTitle después de que la página se haya cargado
-    observeTitle({
-      removeLeadingIcons: false,
-    });
-  });
-</script>
+<script src="../scripts/appbar.ts"></script>

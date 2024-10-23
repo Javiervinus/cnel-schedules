@@ -16,12 +16,12 @@ const defaultOptions: ObserveTitleOptions = {
   appBarTitleId: "appbar-title",
   cloneMode: CloneMode.CLONE_NODE,
   removeLeadingIcons: true,
-  maxFontSize: 18,
+  maxFontSize: 17,
   appBarHeight: 56,
 };
 
 export function observeTitle(options?: ObserveTitleOptions) {
-  console.log(options);
+  // console.log(options);
   const {
     titleId,
     appBarTitleId,
@@ -36,7 +36,7 @@ export function observeTitle(options?: ObserveTitleOptions) {
   const leadingIcons = document.getElementById("leading-actions");
 
   if (!title || !appBarTitle || !leadingIcons) return;
-  console.log(title, appBarTitle, removeLeadingIcons);
+  // console.log(title, appBarTitle, removeLeadingIcons);
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -58,7 +58,7 @@ export function observeTitle(options?: ObserveTitleOptions) {
           const titleFontSize = parseFloat(
             window.getComputedStyle(title).fontSize
           );
-          console.log(titleFontSize);
+          // console.log(titleFontSize);
 
           if (cloneMode === CloneMode.CLONE_NODE) {
             // Clonamos el nodo completo con todo el HTML y atributos
