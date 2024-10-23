@@ -3,8 +3,10 @@ import MainLayout from "@/layouts/MainLayout.astro";
 ---
 
 <MainLayout title="Política de Privacidad">
-  <section class="max-w-3xl mx-auto py-12 px-6">
-    <h1 class="text-4xl font-bold mb-6">Política de Privacidad</h1>
+  <section class="max-w-3xl mx-auto py-6 px-6">
+    <h1 id="page-title" class="text-4xl font-bold mb-6">
+      Política de Privacidad
+    </h1>
 
     <h2 class="text-2xl font-semibold mb-4">1. Introducción</h2>
     <p class="mb-6">
@@ -141,3 +143,12 @@ import MainLayout from "@/layouts/MainLayout.astro";
     </p>
   </section>
 </MainLayout>
+<script is:inline>
+  document.addEventListener("astro:page-load", async () => {
+    // Usamos import dinámico para cargar el módulo solo cuando sea necesario
+    const { observeTitle } = await import("../../src/utils/appbar");
+
+    // Ejecutar la función observeTitle después de que la página se haya cargado
+    observeTitle();
+  });
+</script>

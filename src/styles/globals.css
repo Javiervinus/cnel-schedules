@@ -27,7 +27,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem
+    --radius: 0.5rem;
   }
   /* .dark {
     --background: 222.2 84% 4.9%;
@@ -81,8 +81,28 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+  #appbar-title {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    display: block; /* Asegura que ocupe el espacio necesario */
+    width: auto; /* No limites su ancho */
+    max-width: none; /* Permite que crezca con el contenido */
+    white-space: normal; /* Permite que se ajuste al contenido */
+  }
+  #leading-actions {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
 
-  
+  .opacity-0 {
+    opacity: 0;
+    pointer-events: none;
+    /* transform: translateY(-5px);  */
+  }
+
+  .opacity-100 {
+    opacity: 1;
+    pointer-events: auto;
+    /* transform: translateY(0); */
+  }
 }
 @layer base {
   * {
@@ -91,7 +111,7 @@
   body {
     @apply bg-background text-foreground;
   }
-}/* Clase que forzará el modo claro */
+} /* Clase que forzará el modo claro */
 .force-light-mode {
   --background: 0 0% 100%;
   --foreground: 222.2 84% 4.9%;
@@ -125,4 +145,3 @@
   background-color: white !important;
   color: black !important;
 }
-

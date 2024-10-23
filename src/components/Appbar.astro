@@ -13,8 +13,14 @@ import { ModeToggle } from "./ModeToggle";
       <ArrowLeft />
       <span class="sr-only">Inicio</span>
     </a>
+    <!-- Espacio para el título dinámico en el Appbar -->
+    <div
+      id="appbar-title"
+      class="absolute left-1/2 transform -translate-x-1/2 opacity-0 transition-opacity duration-300"
+    >
+    </div>
 
-    <div class="ml-auto flex gap-1">
+    <div class="ml-auto flex gap-1" id="leading-actions">
       <a
         href="https://github.com/Javiervinus/cnel-schedules"
         target="_blank"
