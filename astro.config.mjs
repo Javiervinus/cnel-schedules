@@ -8,6 +8,8 @@ import react from "@astrojs/react";
 
 import sitemap from "@astrojs/sitemap";
 
+import icon from "astro-icon";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://cnel-schedules.vercel.app",
@@ -15,11 +17,7 @@ export default defineConfig({
   // adapter: vercel({
   //   webAnalytics: { enabled: true },
   // }),
-  integrations: [
-    tailwind({
-      applyBaseStyles: false,
-    }),
-    react(),
-    sitemap(),
-  ],
+  integrations: [tailwind({
+    applyBaseStyles: false,
+  }), react(), sitemap(), icon()],
 });
