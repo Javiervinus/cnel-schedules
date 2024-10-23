@@ -13,7 +13,7 @@ import MainLayout from "@/layouts/MainLayout.astro";
     <!-- Contenido Central -->
     <div class="col-span-12 lg:col-span-10 px-6 pt-0 py-4">
       <div class="max-w-screen-lg mx-auto">
-        <h1 class="text-3xl font-medium text-start mb-3">
+        <h1 id="page-title" class="text-4xl text-start mb-3 font-bold">
           Horarios <span class="text-[#2364B0]">CNEL</span>
         </h1>
         <p class="mb-4">
@@ -29,3 +29,14 @@ import MainLayout from "@/layouts/MainLayout.astro";
     </section>
   </div>
 </MainLayout>
+<script is:inline>
+  document.addEventListener("astro:page-load", async () => {
+    // Usamos import dinámico para cargar el módulo solo cuando sea necesario
+    const { observeTitle } = await import("../../src/utils/appbar");
+
+    // Ejecutar la función observeTitle después de que la página se haya cargado
+    observeTitle({
+      removeLeadingIcons: false,
+    });
+  });
+</script>
