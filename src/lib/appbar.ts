@@ -16,7 +16,7 @@ const defaultOptions: ObserveTitleOptions = {
   appBarTitleId: "appbar-title",
   cloneMode: CloneMode.CLONE_NODE,
   removeLeadingIcons: true,
-  maxFontSize: 18,
+  maxFontSize: 17,
   appBarHeight: 56,
 };
 
