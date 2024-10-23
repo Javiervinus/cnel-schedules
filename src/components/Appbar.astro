@@ -1,32 +1,45 @@
 ---
-import { Github } from "lucide-react";
+import { Github, ArrowLeft } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
-import { Button } from "./ui/button";
 ---
 
 <header
   class="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
 >
-  <div class="container flex h-14 max-w-screen-lg mx-auto items-center px-6">
+  <div
+    class="container flex h-14 max-w-screen-lg mx-auto items-center md:px-0 px-6"
+  >
+    <a id="home" href="/" data-astro-history="replace" class="hidden">
+      <ArrowLeft />
+      <span class="sr-only">Inicio</span>
+    </a>
+
     <div class="ml-auto flex gap-1">
-      <Button
-        asChild
-        variant="outline"
-        size="icon"
-        aria-label="Repositorio en Github"
+      <a
+        href="https://github.com/Javiervinus/cnel-schedules"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 w-9"
       >
-        <a
-          href="https://github.com/Javiervinus/cnel-schedules"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 w-9"
-        >
-          <Github />
-          <span class="sr-only">Repositorio en Github</span>
-        </a>
-      </Button>
+        <Github />
+        <span class="sr-only">Repositorio en Github</span>
+      </a>
 
       <ModeToggle client:load />
     </div>
   </div>
 </header>
+
+<script is:inline>
+  // vamos a obtener el home para aparecerlo solo si la ruta es diferente a la principal (codigo altamente tipado)
+  document.addEventListener("astro:page-load", () => {
+    const home = document.getElementById("home");
+    if (home) {
+      if (location.pathname === "/") {
+        home.style.display = "none";
+      } else {
+        home.style.display = "flex";
+      }
+    }
+  });
+</script>
