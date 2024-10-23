@@ -73,7 +73,7 @@ const { title } = Astro.props;
     <!-- <script is:inline type="module" src="../scripts/appbar2.js"></script> -->
 
     <title>{title}</title>
-    <!-- {
+    {
       import.meta.env.PROD && (
         <script
           defer
@@ -95,7 +95,7 @@ const { title } = Astro.props;
           })(window, document, "clarity", "script", "olchg88tpg");
       </script>
       )
-    } -->
+    }
 
     <ViewTransitions />
   </head>
