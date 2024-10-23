@@ -2,7 +2,8 @@
 
 [![Astro](https://img.shields.io/badge/Astro-0C1222?logo=astro&logoColor=FF5D01)](https://astro.build/)
 [![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
-[![Shadcn/UI](https://img.shields.io/badge/Shadcn/UI-000000?logo=github&logoColor=white)](https://ui.shadcn.com/)
+[![Shadcn/UI](https://img.shields.io/badge/shadcn-000000?logo=shadcn/ui&logoColor=white)](https://ui.shadcn.com/)
+
 
 ## Acceder a la Aplicación
 
