@@ -174,20 +174,17 @@ const { title } = Astro.props;
   }
 </script>
 <script is:inline>
-  const applyThemePreference = () => {
-    const getThemePreference = () => {
-      if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
-        return localStorage.getItem("theme");
-      }
-      return "light"; // Default to light if no preference
-    };
-    const isDark = getThemePreference() === "dark";
-    document.documentElement.classList[isDark ? "add" : "remove"]("dark");
+  // Función para aplicar la preferencia de tema (oscuro o claro) a un documento específico
+  const applyThemePreference = (doc) => {
+    let theme = localStorage.getItem("theme") || "light"; // Obtener la preferencia del tema
+    const isDark = theme === "dark";
+    doc.documentElement.classList[isDark ? "add" : "remove"]("dark"); // Aplicar el tema
   };
 
-  // Aplicar tema al cargar la página
-  applyThemePreference();
+  // Aplicar el tema al documento actual cuando la página se carga inicialmente
+  applyThemePreference(document);
 
+  // Observar cambios en la clase del documento para actualizar la preferencia en localStorage
   if (typeof localStorage !== "undefined") {
     const observer = new MutationObserver(() => {
       const isDark = document.documentElement.classList.contains("dark");
@@ -195,12 +192,13 @@ const { title } = Astro.props;
     });
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ["class"],
+      attributeFilter: ["class"], // Solo observar cambios en la clase
     });
   }
 
-  // Escuchar el evento de transición de vista y aplicar el tema
-  document.addEventListener('astro:after-swap', () => {
-    applyThemePreference(); // Reaplicar el tema después de cada transición
+  // Antes de que ocurra el intercambio de documentos, aplicar el tema al nuevo documento
+  document.addEventListener('astro:before-swap', (event) => {
+    applyThemePreference(event.newDocument); // Aplicar el tema al nuevo documento
   });
 </script>
+
