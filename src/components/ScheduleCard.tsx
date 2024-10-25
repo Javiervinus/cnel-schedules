@@ -100,7 +100,6 @@ export default function ScheduleCard({
               <span>Código único: {notification.cuen}</span>
               {notification.detallePlanificacion?.length! > 0 && (
                 <span className="mt-2">
-                  a
                   <Badge
                     variant="outline"
                     className="text-md border-destructive text-destructive dark:text-white"
