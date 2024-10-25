@@ -100,7 +100,6 @@ export default function ScheduleCard({
               <span>Código único: {notification.cuen}</span>
               {notification.detallePlanificacion?.length! > 0 && (
                 <span className="mt-2">
-                  a
                   <Badge
                     variant="outline"
                     className="text-md border-destructive text-destructive dark:text-white"
@@ -142,10 +141,11 @@ export default function ScheduleCard({
                       en X si porporcionaron un PDF para tu zona.
                     </AlertDescription>
                   </Alert>
-                  <Tweet
-                    tweetId="1849704288295022991"
-                    options={{ height: 400 }}
-                  />
+                  <div className="grid  md:grid-cols-3 grid-cols-1 justify-center w-full ">
+                    <div className="md:col-start-2 col-start-1">
+                      <Tweet tweetId="1849704288295022991" />
+                    </div>
+                  </div>
                 </>
               )}
             </span>

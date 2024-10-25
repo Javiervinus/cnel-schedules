@@ -1,5 +1,6 @@
 import type { GroupedPlanificacion } from "@/interfaces/grouped-planification";
 import type { DetallePlanificacion } from "@/interfaces/schedule-response";
+import { parseDateString } from "./utils";
 
 export function getTotalHours(values: DetallePlanificacion[]): number {
   return values.reduce((acc, value) => {
@@ -82,4 +83,44 @@ export function isCurrentCut(
 
   // Si no se encuentra ningún corte en progreso, devuelve null
   return null;
+}
+
+export function groupByFechaCorte(
+  detallePlanificacion: DetallePlanificacion[]
+): GroupedPlanificacion[] {
+  const map = new Map<string, GroupedPlanificacion>();
+
+  for (const item of detallePlanificacion) {
+    const { fechaCorte, fechaHoraCorte } = item;
+
+    // Parse the date using fechaHoraCorte
+    const dateFrom = parseDateString(fechaHoraCorte);
+    const dateTo = new Date(dateFrom);
+    const [hourFrom, minuteFrom] = item.horaDesde.split(":").map(Number);
+    let [hourTo, minuteTo] = item.horaHasta.split(":").map(Number);
+    dateFrom.setHours(hourFrom, minuteFrom, 0, 0);
+
+    item.cutDateFrom = dateFrom;
+
+    if (hourTo == 0) {
+      hourTo = 24;
+    }
+    dateTo.setHours(hourTo, minuteTo, 0, 0);
+    item.cutDateTo = dateTo;
+
+    if (!map.has(fechaCorte)) {
+      map.set(fechaCorte, {
+        fechaCorte,
+        date: dateFrom,
+        values: [item],
+      });
+    } else {
+      map.get(fechaCorte)!.values.push(item);
+    }
+  }
+
+  // Convert the Map to an array and sort by date
+  return Array.from(map.values()).sort(
+    (a, b) => a.date.getTime() - b.date.getTime()
+  );
 }

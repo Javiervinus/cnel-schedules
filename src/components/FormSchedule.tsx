@@ -1,9 +1,7 @@
+import { groupByFechaCorte } from "@/lib/cut.utils";
 import { useEffect, useRef, useState } from "react";
 
-import type {
-  DetallePlanificacion,
-  ScheduleResponse,
-} from "@/interfaces/schedule-response";
+import type { ScheduleResponse } from "@/interfaces/schedule-response";
 import { Search, X } from "lucide-react";
 import { IdType } from "../constants/idTypes";
 import useLocalStorage from "./hooks/useLocalStorage";
@@ -11,8 +9,6 @@ import IdTypeSelect from "./IdTypeSelect";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
-import type { GroupedPlanificacion } from "@/interfaces/grouped-planification";
-import { parseDateString } from "@/lib/utils";
 import ScheduleDisplay from "./ScheduleDisplay";
 import Spinner from "./SpinnerLoading";
 
@@ -34,6 +30,7 @@ export default function FormSchedule() {
   const [error, setError] = useState<string | null>(null);
   const [errorCnelep, setErrorCnelep] = useState<boolean>(false);
   const [schedule, setSchedule] = useState<ScheduleResponse | null>(null);
+  const [counterNonSchedule, setCounterNonSchedule] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null); // Creamos la referencia
   const initialRender = useRef(true);
 
@@ -73,45 +70,6 @@ export default function FormSchedule() {
     };
   }
 
-  function groupByFechaCorte(
-    detallePlanificacion: DetallePlanificacion[]
-  ): GroupedPlanificacion[] {
-    const map = new Map<string, GroupedPlanificacion>();
-
-    for (const item of detallePlanificacion) {
-      const { fechaCorte, fechaHoraCorte } = item;
-
-      // Parse the date using fechaHoraCorte
-      const dateFrom = parseDateString(fechaHoraCorte);
-      const dateTo = new Date(dateFrom);
-      const [hourFrom, minuteFrom] = item.horaDesde.split(":").map(Number);
-      let [hourTo, minuteTo] = item.horaHasta.split(":").map(Number);
-      dateFrom.setHours(hourFrom, minuteFrom, 0, 0);
-
-      item.cutDateFrom = dateFrom;
-
-      if (hourTo == 0) {
-        hourTo = 24;
-      }
-      dateTo.setHours(hourTo, minuteTo, 0, 0);
-      item.cutDateTo = dateTo;
-
-      if (!map.has(fechaCorte)) {
-        map.set(fechaCorte, {
-          fechaCorte,
-          date: dateFrom,
-          values: [item],
-        });
-      } else {
-        map.get(fechaCorte)!.values.push(item);
-      }
-    }
-
-    // Convert the Map to an array and sort by date
-    return Array.from(map.values()).sort(
-      (a, b) => a.date.getTime() - b.date.getTime()
-    );
-  }
   const handleSubmit = async (
     event?: React.FormEvent,
     idValueEntered?: string,
@@ -158,6 +116,24 @@ export default function FormSchedule() {
         setSchedule(null);
         return;
       } else {
+        // comprobar si la respuesta tiene notificaciones con detallePlanificacion sin valores
+        if (data.notificaciones) {
+          const existsError = data.notificaciones.some((notificacion) => {
+            if (
+              notificacion.detallePlanificacion &&
+              notificacion.detallePlanificacion.length === 0
+            ) {
+              return true;
+            }
+          });
+          if (existsError) {
+            console.log("Error en la respuesta");
+            setCounterNonSchedule(counterNonSchedule + 1);
+            // retrySubmit();
+          } else {
+            setCounterNonSchedule(0);
+          }
+        }
         setBackUpIdValue(requestIdValue);
         setBackUpSchedule(data);
         setSchedule(mapResponse(data));
@@ -193,6 +169,30 @@ export default function FormSchedule() {
       setSchedule(null);
     }
   }, [errorCnelep]);
+
+  useEffect(() => {
+    const idValueEntered = localStorage.getItem("idValue")
+      ? JSON.parse(localStorage.getItem("idValue") as string)
+      : null;
+    const idTypeEntered = localStorage.getItem("idType")
+      ? JSON.parse(localStorage.getItem("idType") as string)
+      : null;
+
+    if (
+      idValueEntered &&
+      idValueEntered !== "" &&
+      idTypeEntered &&
+      idTypeEntered !== "" &&
+      !loading &&
+      !error &&
+      counterNonSchedule < 3 &&
+      counterNonSchedule > 0
+    ) {
+      console.log("reintentando");
+
+      handleSubmit(undefined, idValueEntered, idTypeEntered as IdType);
+    }
+  }, [counterNonSchedule]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
