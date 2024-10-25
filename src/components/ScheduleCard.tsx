@@ -9,7 +9,7 @@ import {
   formatDate,
   handleShareAsImage,
 } from "@/lib/utils";
-import { TwitterTweetEmbed } from "react-twitter-embed";
+import { Tweet } from "react-twitter-widgets";
 
 import "@github/relative-time-element";
 import { AlertCircle, Share, Sparkles } from "lucide-react";
@@ -142,7 +142,7 @@ export default function ScheduleCard({
                       en X si porporcionaron un PDF para tu zona.
                     </AlertDescription>
                   </Alert>
-                  <TwitterTweetEmbed
+                  <Tweet
                     tweetId="1849704288295022991"
                     options={{ height: 400 }}
                   />
