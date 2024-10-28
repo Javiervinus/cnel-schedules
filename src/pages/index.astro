@@ -1,35 +1,156 @@
 ---
+interface Cautions {
+  icon: string;
+  class: string;
+  text: string;
+  shortText?: string;
+  description?: string;
+}
+
 import FormSchedule from "@/components/FormSchedule";
+import { Icon } from "astro-icon/components";
 
 import MainLayout from "@/layouts/MainLayout.astro";
+import PowerSwitch from "@/icons/PowerSwitch.astro";
+import BatteryCharge from "@/icons/BatteryCharge.astro";
+import Planner from "@/icons/Planner.astro";
+import EmojiLightbulb from "@/icons/EmojiLightbulb.astro";
+import MdiClockOutline from "@/icons/MdiClockOutline.astro";
+import FluentFlashlight from "@/icons/FluentFlashlight.astro";
+import UimSchedule from "@/icons/UimSchedule.astro";
+import AntSchedule from "@/icons/AntSchedule.astro";
+const cautions: Cautions[] = [
+  {
+    icon: "PowerSwitch",
+    class: "md:w-10 md:h-10 w-8 h-8 text-red-500",
+    text: "Desconecta lo que no necesitas",
+    // Cuida tus dispositivos y evita problemas eléctricos desconectándolos antes del corte.
+    description:
+      "Cuida tus dispositivos y evita problemas eléctricos desconectándolos antes del corte.",
+  },
+  {
+    icon: "BatteryCharge",
+    class: "md:w-10 md:h-10 w-8 h-8 text-green-500",
+    text: "Carga tus dispositivos esenciales",
+    shortText: "Carga tus dispositivos",
+    description:
+      "Carga tu celular y otros aparatos que puedas necesitar durante el corte para mantenerte comunicado.",
+  },
+  {
+    icon: "Planner",
+    class: "md:w-10 md:h-10 w-8 h-8",
+    text: "Planifica actividades que no necesiten energía",
+    description:
+      "Organiza tareas que no dependan de electricidad para realizar durante el corte.",
+  },
+  {
+    icon: "Lightbulb",
+    class: "md:w-10 md:h-10 w-8 h-8 text-yellow-500",
+    text: "Iluminación siempre a la mano",
+    description:
+      "Ten a la mano una linterna o lámpara de emergencia para iluminar tu hogar durante el corte.",
+  },
+
+  {
+    icon: "Clock",
+    class: "md:w-10 md:h-10 w-8 h-8 text-[#2364B0]",
+    text: "Revisa tu horario de corte de luz",
+    shortText: "Revisa tu horario de corte",
+    description:
+      "Confirma las horas del corte para organizarte mejor y evitar sorpresas.",
+  },
+];
+
+const getIconComponent = (icon: string) => {
+  switch (icon) {
+    case "PowerSwitch":
+      return PowerSwitch;
+    case "BatteryCharge":
+      return BatteryCharge;
+    case "Planner":
+      return AntSchedule;
+    case "Lightbulb":
+      return FluentFlashlight;
+    case "Clock":
+      return MdiClockOutline;
+    default:
+      return null;
+  }
+};
 ---
 
 <MainLayout title="Horarios CNEL - Cortes de Luz Ecuador">
-  <div class="grid grid-cols-12 h-full flex-1">
-    <!-- Sección Izquierda -->
-    <section class="hidden lg:flex lg:col-span-1 overflow-auto justify-start">
-    </section>
+  <div class="mx-auto w-full max-w-6xl">
+    <div class="grid grid-cols-12 flex-1 h-full">
+      <!-- Sección Izquierda -->
+      <section class="hidden lg:flex lg:col-span-1 overflow-auto justify-start">
+      </section>
 
-    <!-- Contenido Central -->
-    <div class="col-span-12 lg:col-span-10 px-6 pt-0 py-4">
-      <div class="max-w-screen-lg mx-auto">
-        <h1 id="page-title" class="text-4xl text-start mb-3 font-bold">
-          Horarios <span class="text-[#2364B0]">CNEL</span>
-        </h1>
-        <p class="mb-4">
-          Ingresa tu identificación para consultar los horarios de cortes de luz
-          programados por CNEL en tu área.
-        </p>
-        <FormSchedule client:load />
+      <!-- Contenido Central -->
+      <div class="col-span-12 lg:col-span-10 px-6 pt-0 py-4">
+        <div class="max-w-screen-lg mx-auto h-full">
+          <div
+            class="flex flex-col h-full items-center justify-start md:justify-start gap-6"
+          >
+            <section
+              class="w-full text-center flex flex-col items-center gap-3"
+            >
+              <h1 id="page-title" class="text-4xl text-start mb-3 font-bold">
+                Horarios <span class="text-[#2364B0]">CNEL</span>
+              </h1>
+              <p class="mb-4 md:block hidden text-left">
+                Consulta los horarios de cortes de luz programados por CNEL en
+                tu área ingresando tu identificación. Con esta herramienta,
+                podrás acceder fácilmente a información detallada sobre los
+                cortes de electricidad en tu zona para que puedas planificar con
+                antelación.
+              </p>
+              <p class="mb-4 md:hidden text-left">
+                Ingresa tu identificación para consultar los horarios de cortes
+                de luz programados por CNEL en tu área.
+              </p>
+              <FormSchedule client:load />
+            </section>
+            <section class="flex flex-col w-full items-center gap-6">
+              <h2 class="md:text-xl text-xl font-bold">
+                Antes del corte de luz
+              </h2>
+              <div
+                class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full justify-center gap-4 md:gap-6"
+              >
+                {
+                  cautions.map((caution) => {
+                    const IconComponent = getIconComponent(caution.icon);
+                    return (
+                      <div class="flex flex-col gap-2 items-center sm:items-start border  w-full  p-4 rounded-xl bg-card  ">
+                        {IconComponent && (
+                          <IconComponent class={caution.class} />
+                        )}
+                        <h5 class="sm:text-start text-center font-semibold hidden md:block">
+                          {caution.text}
+                        </h5>
+                        <h5 class="sm:text-start text-center font-semibold md:hidden">
+                          {caution.shortText || caution.text}
+                        </h5>
+                        <p class="text-md  sm:text-start text-center">
+                          {caution.description}
+                        </p>
+                      </div>
+                    );
+                  })
+                }
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <!-- Sección Derecha -->
+        <section class="hidden lg:flex justify-end lg:col-span-1 overflow-auto">
+        </section>
       </div>
     </div>
-
-    <!-- Sección Derecha -->
-    <section class="hidden lg:flex justify-end lg:col-span-1 overflow-auto">
-    </section>
   </div>
 </MainLayout>
-
 <script is:inline>
   function observeTitle(options = {}) {
     const {

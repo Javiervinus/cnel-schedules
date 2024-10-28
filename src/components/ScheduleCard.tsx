@@ -9,7 +9,6 @@ import {
   formatDate,
   handleShareAsImage,
 } from "@/lib/utils";
-import { Tweet } from "react-twitter-widgets";
 
 import "@github/relative-time-element";
 import { AlertCircle, Share, Sparkles } from "lucide-react";
@@ -85,7 +84,7 @@ export default function ScheduleCard({
 
   return (
     <>
-      <Card key={notification.cuentaContrato} className="relative">
+      <Card key={notification.cuentaContrato} className="relative text-left">
         <CardHeader>
           <CardTitle className="flex justify-between mb-3">
             <span>Contrato {notification.cuentaContrato}</span>
@@ -141,11 +140,11 @@ export default function ScheduleCard({
                       en X si porporcionaron un PDF para tu zona.
                     </AlertDescription>
                   </Alert>
-                  <div className="grid  md:grid-cols-3 grid-cols-1 justify-center w-full ">
+                  {/* <div className="grid  md:grid-cols-3 grid-cols-1 justify-center w-full ">
                     <div className="md:col-start-2 col-start-1">
                       <Tweet tweetId="1849704288295022991" />
                     </div>
-                  </div>
+                  </div> */}
                 </>
               )}
             </span>
