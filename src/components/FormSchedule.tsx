@@ -185,7 +185,7 @@ export default function FormSchedule() {
       idTypeEntered !== "" &&
       !loading &&
       !error &&
-      counterNonSchedule < 3 &&
+      counterNonSchedule < 4 &&
       counterNonSchedule > 0
     ) {
       console.log("reintentando");

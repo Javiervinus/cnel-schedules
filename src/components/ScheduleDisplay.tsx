@@ -1,6 +1,6 @@
 import type { ScheduleResponse } from "@/interfaces/schedule-response";
 import { AlertCircle } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ScheduleCard from "./ScheduleCard";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Badge } from "./ui/badge";
@@ -19,8 +19,18 @@ const ScheduleDisplay: React.FC<ScheduleDisplayProps> = ({
   lastSuccess,
   schedule,
 }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (schedule) {
+      setIsVisible(true);
+    }
+  }, [schedule]);
+
   return (
-    <section className="mt-4 w-full">
+    <section
+      className={`w-full collapsible ${schedule || error ? "expanded" : ""}`}
+    >
       <div className="flex flex-col gap-2 mb-2">
         {error && (
           <Alert variant="destructive">
