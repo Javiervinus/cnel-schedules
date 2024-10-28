@@ -85,7 +85,7 @@ export default function ScheduleCard({
 
   return (
     <>
-      <Card key={notification.cuentaContrato} className="relative">
+      <Card key={notification.cuentaContrato} className="relative text-left">
         <CardHeader>
           <CardTitle className="flex justify-between mb-3">
             <span>Contrato {notification.cuentaContrato}</span>

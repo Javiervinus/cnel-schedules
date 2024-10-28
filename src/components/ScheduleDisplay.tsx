@@ -20,7 +20,7 @@ const ScheduleDisplay: React.FC<ScheduleDisplayProps> = ({
   schedule,
 }) => {
   return (
-    <section className="mt-4">
+    <section className="mt-4 w-full">
       <div className="flex flex-col gap-2 mb-2">
         {error && (
           <Alert variant="destructive">
