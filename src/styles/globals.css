@@ -145,3 +145,13 @@
   background-color: white !important;
   color: black !important;
 }
+
+.collapsible {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 5s ease-out;
+}
+
+.collapsible.expanded {
+  max-height: 10000px;
+}

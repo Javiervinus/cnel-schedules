@@ -3,6 +3,8 @@ interface Cautions {
   icon: string;
   class: string;
   text: string;
+  shortText?: string;
+  description?: string;
 }
 
 import FormSchedule from "@/components/FormSchedule";
@@ -14,32 +16,48 @@ import BatteryCharge from "@/icons/BatteryCharge.astro";
 import Planner from "@/icons/Planner.astro";
 import EmojiLightbulb from "@/icons/EmojiLightbulb.astro";
 import MdiClockOutline from "@/icons/MdiClockOutline.astro";
+import FluentFlashlight from "@/icons/FluentFlashlight.astro";
+import UimSchedule from "@/icons/UimSchedule.astro";
+import AntSchedule from "@/icons/AntSchedule.astro";
 const cautions: Cautions[] = [
   {
     icon: "PowerSwitch",
-    class: "w-7 h-7",
+    class: "md:w-10 md:h-10 w-8 h-8 text-red-500",
     text: "Desconecta lo que no necesitas",
+    // Cuida tus dispositivos y evita problemas eléctricos desconectándolos antes del corte.
+    description:
+      "Cuida tus dispositivos y evita problemas eléctricos desconectándolos antes del corte.",
   },
   {
     icon: "BatteryCharge",
-    class: "w-7 h-7 text-green-500",
-    text: "Carga tus dispositivos",
+    class: "md:w-10 md:h-10 w-8 h-8 text-green-500",
+    text: "Carga tus dispositivos esenciales",
+    shortText: "Carga tus dispositivos",
+    description:
+      "Carga tu celular y otros aparatos que puedas necesitar durante el corte para mantenerte comunicado.",
   },
   {
     icon: "Planner",
-    class: "w-7 h-7",
-    text: "Ajusta tu rutina al horario",
+    class: "md:w-10 md:h-10 w-8 h-8",
+    text: "Planifica actividades que no necesiten energía",
+    description:
+      "Organiza tareas que no dependan de electricidad para realizar durante el corte.",
   },
   {
     icon: "Lightbulb",
-    class: "w-7 h-7",
-    text: "Iluminación a la mano",
+    class: "md:w-10 md:h-10 w-8 h-8 text-yellow-500",
+    text: "Iluminación siempre a la mano",
+    description:
+      "Ten a la mano una linterna o lámpara de emergencia para iluminar tu hogar durante el corte.",
   },
-  // Revisa el horario del corte
+
   {
     icon: "Clock",
-    class: "w-7 h-7 text-[#2364B0]",
-    text: "Revisa el horario del corte",
+    class: "md:w-10 md:h-10 w-8 h-8 text-[#2364B0]",
+    text: "Revisa tu horario de corte de luz",
+    shortText: "Revisa tu horario de corte",
+    description:
+      "Confirma las horas del corte para organizarte mejor y evitar sorpresas.",
   },
 ];
 
@@ -50,9 +68,9 @@ const getIconComponent = (icon: string) => {
     case "BatteryCharge":
       return BatteryCharge;
     case "Planner":
-      return Planner;
+      return AntSchedule;
     case "Lightbulb":
-      return EmojiLightbulb;
+      return FluentFlashlight;
     case "Clock":
       return MdiClockOutline;
     default:
@@ -62,151 +80,173 @@ const getIconComponent = (icon: string) => {
 ---
 
 <MainLayout title="Horarios CNEL - Cortes de Luz Ecuador">
-  <div class="grid grid-cols-12 flex-1">
-    <!-- Sección Izquierda -->
-    <section class="hidden lg:flex lg:col-span-1 overflow-auto justify-start">
-    </section>
-
-    <!-- Contenido Central -->
-    <div class="col-span-12 lg:col-span-10 px-6 pt-0 py-4">
-      <div class="max-w-screen-lg mx-auto h-full">
-        <div
-          class="flex flex-col h-full items-center justify-start md:justify-center gap-6"
-        >
-          <section class="w-full text-center flex flex-col items-center">
-            <h1 id="page-title" class="text-4xl text-start mb-3 font-bold">
-              Horarios <span class="text-[#2364B0]">CNEL</span>
-            </h1>
-            <p class="mb-4">
-              Ingresa tu identificación para consultar los horarios de cortes de
-              luz programados por CNEL en tu área.
-            </p>
-            <FormSchedule client:load />
-          </section>
-          <section class="flex flex-col w-full items-center gap-6">
-            <h2 class="text-2xl font-semibold">Toma precauciones</h2>
-            <div
-              class="grid md:grid-cols-5 grid-cols-2 w-full items-center justify-center gap-5"
-            >
-              {
-                cautions.map((caution) => {
-                  const IconComponent = getIconComponent(caution.icon);
-                  return (
-                    <div class="flex flex-col gap-2 items-center  w-full border p-2 rounded-xl bg-card  shadow">
-                      {IconComponent && <IconComponent class={caution.class} />}
-                      <h5 class="text-center font-medium">{caution.text}</h5>
-                    </div>
-                  );
-                })
-              }
-            </div>
-          </section>
-        </div>
-      </div>
-
-      <!-- Sección Derecha -->
-      <section class="hidden lg:flex justify-end lg:col-span-1 overflow-auto">
+  <div class="mx-auto w-full max-w-6xl">
+    <div class="grid grid-cols-12 flex-1 h-full">
+      <!-- Sección Izquierda -->
+      <section class="hidden lg:flex lg:col-span-1 overflow-auto justify-start">
       </section>
+
+      <!-- Contenido Central -->
+      <div class="col-span-12 lg:col-span-10 px-6 pt-0 py-4">
+        <div class="max-w-screen-lg mx-auto h-full">
+          <div
+            class="flex flex-col h-full items-center justify-start md:justify-start gap-6"
+          >
+            <section
+              class="w-full text-center flex flex-col items-center gap-3"
+            >
+              <h1 id="page-title" class="text-4xl text-start mb-3 font-bold">
+                Horarios <span class="text-[#2364B0]">CNEL</span>
+              </h1>
+              <p class="mb-4 md:block hidden text-left">
+                Consulta los horarios de cortes de luz programados por CNEL en
+                tu área ingresando tu identificación. Con esta herramienta,
+                podrás acceder fácilmente a información detallada sobre los
+                cortes de electricidad en tu zona para que puedas planificar con
+                antelación.
+              </p>
+              <p class="mb-4 md:hidden text-left">
+                Ingresa tu identificación para consultar los horarios de cortes
+                de luz programados por CNEL en tu área.
+              </p>
+              <FormSchedule client:load />
+            </section>
+            <section class="flex flex-col w-full items-center gap-6">
+              <h2 class="md:text-xl text-xl font-bold">
+                Antes del corte de luz
+              </h2>
+              <div
+                class="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 w-full justify-center gap-4 md:gap-6"
+              >
+                {
+                  cautions.map((caution) => {
+                    const IconComponent = getIconComponent(caution.icon);
+                    return (
+                      <div class="flex flex-col gap-2 items-center sm:items-start border  w-full  p-4 rounded-xl bg-card  ">
+                        {IconComponent && (
+                          <IconComponent class={caution.class} />
+                        )}
+                        <h5 class="sm:text-start text-center font-semibold hidden md:block">
+                          {caution.text}
+                        </h5>
+                        <h5 class="sm:text-start text-center font-semibold md:hidden">
+                          {caution.shortText || caution.text}
+                        </h5>
+                        <p class="text-md  sm:text-start text-center">
+                          {caution.description}
+                        </p>
+                      </div>
+                    );
+                  })
+                }
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <!-- Sección Derecha -->
+        <section class="hidden lg:flex justify-end lg:col-span-1 overflow-auto">
+        </section>
+      </div>
     </div>
   </div>
+</MainLayout>
+<script is:inline>
+  function observeTitle(options = {}) {
+    const {
+      titleId,
+      appBarTitleId,
+      cloneMode,
+      removeLeadingIcons,
+      maxFontSize,
+      appBarHeight,
+    } = { ...defaultOptions, ...options };
 
-  <script is:inline>
-    function observeTitle(options = {}) {
-      const {
-        titleId,
-        appBarTitleId,
-        cloneMode,
-        removeLeadingIcons,
-        maxFontSize,
-        appBarHeight,
-      } = { ...defaultOptions, ...options };
+    const title = document.getElementById(titleId);
+    const appBarTitle = document.getElementById(appBarTitleId);
+    const leadingIcons = document.getElementById("leading-actions");
 
-      const title = document.getElementById(titleId);
-      const appBarTitle = document.getElementById(appBarTitleId);
-      const leadingIcons = document.getElementById("leading-actions");
+    if (!title || !appBarTitle || !leadingIcons) return;
 
-      if (!title || !appBarTitle || !leadingIcons) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Título visible, ocultar el título en el Appbar y mostrar los íconos
+            appBarTitle.classList.add("opacity-0");
+            appBarTitle.classList.remove("opacity-100");
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              // Título visible, ocultar el título en el Appbar y mostrar los íconos
-              appBarTitle.classList.add("opacity-0");
-              appBarTitle.classList.remove("opacity-100");
+            if (removeLeadingIcons) {
+              leadingIcons.classList.add("opacity-100");
+              leadingIcons.classList.remove("opacity-0");
+            }
+          } else {
+            // Limpiar el contenido actual del Appbar
+            appBarTitle.innerHTML = "";
 
-              if (removeLeadingIcons) {
-                leadingIcons.classList.add("opacity-100");
-                leadingIcons.classList.remove("opacity-0");
-              }
-            } else {
-              // Limpiar el contenido actual del Appbar
-              appBarTitle.innerHTML = "";
+            // Obtenemos el tamaño de fuente original del título
+            const titleFontSize = parseFloat(
+              window.getComputedStyle(title).fontSize
+            );
 
-              // Obtenemos el tamaño de fuente original del título
-              const titleFontSize = parseFloat(
-                window.getComputedStyle(title).fontSize
-              );
+            if (cloneMode === CloneMode.CLONE_NODE) {
+              // Clonamos el nodo completo con todo el HTML y atributos
+              const clonedTitle = title.cloneNode(true);
 
-              if (cloneMode === CloneMode.CLONE_NODE) {
-                // Clonamos el nodo completo con todo el HTML y atributos
-                const clonedTitle = title.cloneNode(true);
+              // Remover márgenes y paddings
+              clonedTitle.style.margin = "0";
+              clonedTitle.style.padding = "0";
+              clonedTitle.style.maxWidth = "100%";
 
-                // Remover márgenes y paddings
-                clonedTitle.style.margin = "0";
-                clonedTitle.style.padding = "0";
-                clonedTitle.style.maxWidth = "100%";
-
-                // Solo aplicar el tamaño máximo si es mayor que el actual
-                if (titleFontSize > maxFontSize) {
-                  clonedTitle.style.fontSize = `${maxFontSize}px`;
-                }
-
-                appBarTitle.appendChild(clonedTitle);
-              } else if (cloneMode === CloneMode.INNER_HTML) {
-                // Copiamos solo el innerHTML
-                appBarTitle.innerHTML = title.innerHTML;
-
-                // Solo aplicar el tamaño máximo si es mayor que el actual
-                if (titleFontSize > maxFontSize) {
-                  appBarTitle.style.fontSize = `${maxFontSize}px`;
-                }
-              } else if (cloneMode === CloneMode.TEXT_CONTENT) {
-                // Copiamos solo el textContent
-                appBarTitle.textContent = title.textContent;
-
-                // Solo aplicar el tamaño máximo si es mayor que el actual
-                if (titleFontSize > maxFontSize) {
-                  appBarTitle.style.fontSize = `${maxFontSize}px`;
-                }
+              // Solo aplicar el tamaño máximo si es mayor que el actual
+              if (titleFontSize > maxFontSize) {
+                clonedTitle.style.fontSize = `${maxFontSize}px`;
               }
 
-              appBarTitle.classList.add("opacity-100");
-              appBarTitle.classList.remove("opacity-0");
+              appBarTitle.appendChild(clonedTitle);
+            } else if (cloneMode === CloneMode.INNER_HTML) {
+              // Copiamos solo el innerHTML
+              appBarTitle.innerHTML = title.innerHTML;
 
-              if (removeLeadingIcons) {
-                leadingIcons.classList.add("opacity-0");
-                leadingIcons.classList.remove("opacity-100");
+              // Solo aplicar el tamaño máximo si es mayor que el actual
+              if (titleFontSize > maxFontSize) {
+                appBarTitle.style.fontSize = `${maxFontSize}px`;
+              }
+            } else if (cloneMode === CloneMode.TEXT_CONTENT) {
+              // Copiamos solo el textContent
+              appBarTitle.textContent = title.textContent;
+
+              // Solo aplicar el tamaño máximo si es mayor que el actual
+              if (titleFontSize > maxFontSize) {
+                appBarTitle.style.fontSize = `${maxFontSize}px`;
               }
             }
-          });
-        },
-        {
-          rootMargin: `-${appBarHeight}px 0px 0px 0px`,
-          threshold: 0,
-        }
-      );
 
-      observer.observe(title);
-    }
+            appBarTitle.classList.add("opacity-100");
+            appBarTitle.classList.remove("opacity-0");
 
-    document.addEventListener("astro:page-load", async () => {
-      // Usamos import dinámico para cargar el módulo solo cuando sea necesario
+            if (removeLeadingIcons) {
+              leadingIcons.classList.add("opacity-0");
+              leadingIcons.classList.remove("opacity-100");
+            }
+          }
+        });
+      },
+      {
+        rootMargin: `-${appBarHeight}px 0px 0px 0px`,
+        threshold: 0,
+      }
+    );
 
-      // Ejecutar la función observeTitle después de que la página se haya cargado
-      observeTitle({
-        removeLeadingIcons: false,
-      });
+    observer.observe(title);
+  }
+
+  document.addEventListener("astro:page-load", async () => {
+    // Usamos import dinámico para cargar el módulo solo cuando sea necesario
+
+    // Ejecutar la función observeTitle después de que la página se haya cargado
+    observeTitle({
+      removeLeadingIcons: false,
     });
-  </script>
-</MainLayout>
+  });
+</script>
