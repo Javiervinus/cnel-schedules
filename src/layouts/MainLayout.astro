@@ -77,8 +77,9 @@ const { title } = Astro.props;
       import.meta.env.PROD && (
         <script
           defer
+          type="text/partytown"
           src="https://cloud.umami.is/script.js"
-          data-website-id="ac3dd82c-088d-4bf6-ab61-bab86a5a2b14"
+          data-website-id={import.meta.env.UMAMI_ID}
         />
         <script type="text/javascript">
           (function (c, l, a, r, i, t, y) {
