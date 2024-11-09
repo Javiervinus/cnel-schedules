@@ -217,3 +217,15 @@ const { title } = Astro.props;
     appBarHeight: 56,
   };
 </script>
+{
+  import.meta.env.NODE_ENV === "development" ? (
+    <script
+      is:inline
+      src="https://vercel.live/_next-live/feedback/feedback.js"
+      data-explicit-opt-in="true"
+      data-owner-id={import.meta.env.VERCEL_LIVE_OWNER_ID}
+      data-project-id={import.meta.env.VERCEL_LIVE_PROJECT_ID}
+      data-branch="develop"
+    />
+  ) : null
+}
