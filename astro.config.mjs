@@ -4,7 +4,7 @@ import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 
 import react from "@astrojs/react";
-// import vercel from "@astrojs/vercel/static";
+import vercel from "@astrojs/vercel/serverless";
 
 import sitemap from "@astrojs/sitemap";
 
@@ -16,9 +16,9 @@ import partytown from "@astrojs/partytown";
 export default defineConfig({
   site: "https://cnel-schedules.vercel.app",
   output: "hybrid",
-  // adapter: vercel({
-  //   webAnalytics: { enabled: true },
-  // }),
+  adapter: vercel({
+    edgeMiddleware: true,
+  }),
   integrations: [
     tailwind({
       applyBaseStyles: false,
