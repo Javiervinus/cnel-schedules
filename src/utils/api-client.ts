@@ -27,6 +27,8 @@ export async function fetchFeatureFlag<K extends FeatureFlagName>(
     throw new Error(`Error fetching feature flag: ${flagName}`);
   }
   const data = (await response.json()) as FeatureFlagResponse<K>;
+  console.log("🚀 ~ data:", data);
+
   return data.value;
 }
 

@@ -16,9 +16,7 @@ import partytown from "@astrojs/partytown";
 export default defineConfig({
   site: "https://cnel-schedules.vercel.app",
   output: "hybrid",
-  adapter: vercel({
-    edgeMiddleware: true,
-  }),
+  adapter: vercel(),
   integrations: [
     tailwind({
       applyBaseStyles: false,
