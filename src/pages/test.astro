@@ -1,18 +1,29 @@
 ---
 import MainLayout from "@/layouts/MainLayout.astro";
-import { getFeatureFlag } from "@/utils/feature-flags";
+import { fetchFeatureFlag } from "@/utils/api-client";
 
 export const prerender = false;
-const featureCookies = Astro.cookies.get("vercel-flag-overrides")?.value;
-console.log("🚀 ~ constGET:APIRoute= ~ featureCookies:", featureCookies);
+// Obtener una feature flag específica
+const url = new URL(Astro.request.url);
+const baseUrl = url.origin;
+const clientCookies = Astro.request.headers.get("cookie");
 
-const flagValue = await getFeatureFlag("newScheduleAvailable", featureCookies);
+const headers: HeadersInit = {};
+if (clientCookies) {
+  headers["Cookie"] = clientCookies;
+}
+const newScheduleAvailable = await fetchFeatureFlag(
+  "newScheduleAvailable",
+  baseUrl,
+  headers
+);
+console.log("🚀 ~ newScheduleAvailable:", newScheduleAvailable);
 ---
 
 <MainLayout title="testingPage">
   <code>
-    <pre>{JSON.stringify(featureCookies)}</pre>
+    <pre>{JSON.stringify(newScheduleAvailable)}</pre>
 
-    <pre>{JSON.stringify(flagValue)}</pre>
+    <!-- <pre>{JSON.stringify(flagValue)}</pre> -->
   </code>
 </MainLayout>
