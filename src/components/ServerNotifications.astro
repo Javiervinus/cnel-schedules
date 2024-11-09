@@ -1,5 +1,4 @@
 ---
-import { fetchFeatureFlag } from "@/utils/api-client";
 import Sonner from "./Sonner";
 
 // Obtener la URL base desde Astro
@@ -13,12 +12,12 @@ if (clientCookies) {
 }
 
 // Obtener una feature flag específica
-const newScheduleAvailable = await fetchFeatureFlag(
-  "newScheduleAvailable",
-  baseUrl,
-  headers
-);
-console.log("🚀 ~ newScheduleAvailable:", newScheduleAvailable);
+// const newScheduleAvailable = await fetchFeatureFlag(
+//   "newScheduleAvailable",
+//   baseUrl,
+//   headers
+// );
+// console.log("🚀 ~ newScheduleAvailable:", newScheduleAvailable);
 
 // Obtener todas las feature flags
 // const featureFlags = await fetchAllFeatureFlags(baseUrl, headers);
