@@ -1,30 +1,17 @@
 ---
+import { getFeatureFlag } from "@/utils/feature-flags";
 import Sonner from "./Sonner";
 
-// Obtener la URL base desde Astro
-const url = new URL(Astro.request.url);
-const baseUrl = url.origin;
-const clientCookies = Astro.request.headers.get("cookie");
+const featureCookies = Astro.cookies.get("vercel-flag-overrides")?.value;
 
-const headers: HeadersInit = {};
-if (clientCookies) {
-  headers["Cookie"] = clientCookies;
-}
-
-// Obtener una feature flag específica
-// const newScheduleAvailable = await fetchFeatureFlag(
-//   "newScheduleAvailable",
-//   baseUrl,
-//   headers
-// );
-// console.log("🚀 ~ newScheduleAvailable:", newScheduleAvailable);
-
-// Obtener todas las feature flags
-// const featureFlags = await fetchAllFeatureFlags(baseUrl, headers);
+const newScheduleAvailable = await getFeatureFlag(
+  "newScheduleAvailable",
+  featureCookies
+);
 ---
 
 {
-  true && (
+  newScheduleAvailable && (
     <Sonner
       text="Nuevo horario de desconexión disponible"
       description="CNEL ha proporcionado nuevos horarios para esta semana. ¡Revisa la página para más información!"
