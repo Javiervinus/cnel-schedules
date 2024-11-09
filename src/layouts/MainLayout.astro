@@ -1,6 +1,7 @@
 ---
 import Appbar from "@/components/Appbar.astro";
 import Footer from "@/components/Footer.astro";
+import { Toaster } from "@/components/ui/sonner";
 import "@/styles/globals.css";
 import { ViewTransitions } from "astro:transitions";
 
@@ -110,6 +111,8 @@ const { title } = Astro.props;
 
       <Footer />
     </section>
+    <Toaster client:load />
+
   </body>
 </html>
 <style is:global>
