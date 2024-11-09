@@ -17,6 +17,7 @@ import MdiClockOutline from "@/icons/MdiClockOutline.astro";
 import FluentFlashlight from "@/icons/FluentFlashlight.astro";
 import AntSchedule from "@/icons/AntSchedule.astro";
 import ServerNotifications from "@/components/ServerNotifications.astro";
+import ServerTest from "@/components/ServerTest.astro";
 const cautions: Cautions[] = [
   {
     icon: "PowerSwitch",
@@ -107,9 +108,9 @@ const getIconComponent = (icon: string) => {
                 Ingresa tu identificación para consultar los horarios de cortes
                 de luz programados por CNEL en tu área.
               </p>
-              island<ServerNotifications server:defer>
+              <ServerTest server:defer>
                 <div slot="fallback">esperando</div>
-              </ServerNotifications>
+              </ServerTest>
               <FormSchedule client:visible />
             </section>
             <section class="flex flex-col w-full items-center gap-6">
