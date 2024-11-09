@@ -1,0 +1,53 @@
+---
+import { fetchFeatureFlag } from "@/utils/api-client";
+import Sonner from "./Sonner";
+
+// Obtener la URL base desde Astro
+const url = new URL(Astro.request.url);
+const baseUrl = url.origin;
+const clientCookies = Astro.request.headers.get("cookie");
+
+const headers: HeadersInit = {};
+if (clientCookies) {
+  headers["Cookie"] = clientCookies;
+}
+
+// Obtener una feature flag específica
+const newScheduleAvailable = await fetchFeatureFlag(
+  "newScheduleAvailable",
+  baseUrl,
+  headers
+);
+
+// Obtener todas las feature flags
+// const featureFlags = await fetchAllFeatureFlags(baseUrl, headers);
+---
+
+{
+  newScheduleAvailable && (
+    <Sonner
+      text="Nuevo horario de desconexión disponible"
+      description="CNEL ha proporcionado nuevos horarios para esta semana. ¡Revisa la página para más información!"
+      duration={7000}
+      client:visible
+    />
+  )
+}
+
+<!-- ---
+import { FeatureFlagEnum } from "@/enums/feature-flag.enum";
+import { GET } from "@/pages/api/feature-flag/[flag]";
+import { createContext } from "astro/middleware";
+
+const params = { flag: FeatureFlagEnum.newScheduleAvailable};
+const context = createContext({
+  request: Astro.request,
+  params: params,
+  defaultLocale: "es",
+});
+let response = await GET(context);
+const data = await response.json();
+console.log(data);
+---
+
+<h1>world!</h1> -->

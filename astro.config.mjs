@@ -15,7 +15,7 @@ import partytown from "@astrojs/partytown";
 // https://astro.build/config
 export default defineConfig({
   site: "https://cnel-schedules.vercel.app",
-  // output: "static",
+  output: "hybrid",
   // adapter: vercel({
   //   webAnalytics: { enabled: true },
   // }),
@@ -32,4 +32,7 @@ export default defineConfig({
       },
     }),
   ],
+  experimental: {
+    serverIslands: true,
+  },
 });
