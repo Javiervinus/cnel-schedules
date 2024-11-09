@@ -1,5 +1,6 @@
 ---
-import { fetchAllFeatureFlags, fetchFeatureFlag } from "@/utils/api-client";
+import { fetchFeatureFlag } from "@/utils/api-client";
+import Sonner from "./Sonner";
 
 // Obtener la URL base desde Astro
 const url = new URL(Astro.request.url);
@@ -19,14 +20,20 @@ const newScheduleAvailable = await fetchFeatureFlag(
 );
 
 // Obtener todas las feature flags
-const featureFlags = await fetchAllFeatureFlags(baseUrl, headers);
-
-// Usar las feature flags en el componente
-console.log("🚀 ~ newScheduleAvailable:", newScheduleAvailable);
-console.log("🚀 ~ featureFlags:", featureFlags);
+// const featureFlags = await fetchAllFeatureFlags(baseUrl, headers);
 ---
 
-<h1>¡Hola mundo!</h1>
+{
+  newScheduleAvailable && (
+    <Sonner
+      text="Nuevo horario de desconexión disponible"
+      description="CNEL ha proporcionado nuevos horarios para esta semana. ¡Revisa la página para más información!"
+      duration={7000}
+      client:visible
+    />
+  )
+}
+
 <!-- ---
 import { FeatureFlagEnum } from "@/enums/feature-flag.enum";
 import { GET } from "@/pages/api/feature-flag/[flag]";
