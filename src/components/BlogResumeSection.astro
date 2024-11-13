@@ -3,6 +3,8 @@ Astro.response.headers.set(
   "Cache-Control",
   "s-maxage=10, stale-while-revalidate"
 );
+Astro.response.headers.set("Vercel-CDN-Cache-Control", "max-age=3600");
+Astro.response.headers.set("CDN-Cache-Control", "max-age=60");
 
 import type { BlogPost } from "@/interfaces/blog-post";
 import { contentfulClient } from "@/lib/contentful";
