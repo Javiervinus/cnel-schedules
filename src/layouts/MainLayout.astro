@@ -8,7 +8,7 @@ import { ViewTransitions } from "astro:transitions";
 
 
 
-const { title, description, image, articleDate,articleAuthor } = Astro.props
+const { title, description, image, articleDate,articleAuthor,isHome } = Astro.props
 ---
 
 <!doctype html>
@@ -25,6 +25,7 @@ const { title, description, image, articleDate,articleAuthor } = Astro.props
     ogImage={image}
     articleDate={articleDate}
     articleAuthor={articleAuthor}
+    isHome={isHome}
 
     ></BaseHead>
 
