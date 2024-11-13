@@ -21,7 +21,6 @@ const defaultOptions: ObserveTitleOptions = {
 };
 
 export function observeTitle(options?: ObserveTitleOptions) {
-  console.log(options);
   const {
     titleId,
     appBarTitleId,
@@ -36,7 +35,6 @@ export function observeTitle(options?: ObserveTitleOptions) {
   const leadingIcons = document.getElementById("leading-actions");
 
   if (!title || !appBarTitle || !leadingIcons) return;
-  console.log(title, appBarTitle, removeLeadingIcons);
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -58,7 +56,6 @@ export function observeTitle(options?: ObserveTitleOptions) {
           const titleFontSize = parseFloat(
             window.getComputedStyle(title).fontSize
           );
-          console.log(titleFontSize);
 
           if (cloneMode === CloneMode.CLONE_NODE) {
             // Clonamos el nodo completo con todo el HTML y atributos

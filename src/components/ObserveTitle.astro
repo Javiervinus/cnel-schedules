@@ -39,7 +39,6 @@
             const titleFontSize = parseFloat(
               window.getComputedStyle(title).fontSize
             );
-            console.log(cloneMode);
             if (cloneMode === CloneMode.CLONE_NODE) {
               // Clonamos el nodo completo con todo el HTML y atributos
               const clonedTitle = title.cloneNode(true);

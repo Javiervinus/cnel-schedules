@@ -36,7 +36,6 @@ const { content, contentMarkdown } = Astro.props;
       const wrapper = document.createElement("div");
       wrapper.classList.add("flex", "justify-center");
       wrapper.appendChild(image.cloneNode(true));
-      console.log(image);
       image.replaceWith(wrapper);
     });
   });
