@@ -4,7 +4,7 @@ import Footer from "@/components/Footer.astro";
 import BaseHead from "@/components/BaseHead.astro";
 import { Toaster } from "@/components/ui/sonner";
 import "@/styles/globals.css";
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from 'astro:transitions';
 
 
 
@@ -62,8 +62,8 @@ const { title, description, image, articleDate,articleAuthor,isHome } = Astro.pr
       )
     }
 
-    <ViewTransitions />
-  </head>
+<ClientRouter />
+</head>
   <body class="relative">
     <section class="relative flex flex-col min-h-screen bg-background">
       <Appbar />

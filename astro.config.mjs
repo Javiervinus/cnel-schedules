@@ -7,7 +7,7 @@ import { loadEnv } from "vite"; // Importa loadEnv de Vite
 import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
-import vercel from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/vercel";
 import icon from "astro-icon";
 
 // Carga las variables de entorno
@@ -16,7 +16,8 @@ const env = loadEnv(process.env.NODE_ENV || "development", process.cwd(), "");
 // https://astro.build/config
 export default defineConfig({
   site: "https://cnel-schedules.vercel.app",
-  output: "hybrid",
+  output: "static",
+
   adapter: vercel({
     isr: {
       bypassToken: env.BYPASS_TOKEN_CACHE, // Cambiado para usar env
@@ -41,9 +42,6 @@ export default defineConfig({
       },
     }),
   ],
-  experimental: {
-    serverIslands: true,
-  },
 });
 /**
  * @param {Record<string, string>} env - Environment variables
