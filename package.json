@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@iconify-json/mdi": "^1.2.1",
-    "@tailwindcss/typography": "^0.5.15"
+    "@tailwindcss/typography": "^0.5.15",
+    "vite": "^5.4.11"
   }
 }
