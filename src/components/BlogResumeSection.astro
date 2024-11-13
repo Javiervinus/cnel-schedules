@@ -16,7 +16,6 @@ const entries = await contentfulClient.getEntries<BlogPost>({
   content_type: "blogPost",
   select: [
     "fields.title",
-    "fields.title",
     "fields.slug",
     "fields.featuredImage",
     "fields.summary",
