@@ -1,0 +1,38 @@
+.blog-content {
+  h1 {
+    @apply text-3xl dark:text-white my-5 text-wrap !important;
+  }
+  h2 {
+    @apply text-2xl font-medium dark:text-blue-500 my-5 !important;
+  }
+
+  h3 {
+    @apply text-xl dark:text-white my-5 !important;
+  }
+
+  p {
+    @apply dark:text-white my-5 !important;
+  }
+  strong {
+    @apply font-medium !important;
+  }
+
+  /* a {
+    @apply text-blue-500 hover:underline !important;
+  } */
+  img {
+    @apply my-5 md:max-w-60  max-w-52 rounded-lg  !important;
+  }
+  /* Estilos de la tabla */
+  table {
+    @apply w-full dark:text-white my-5 border-collapse border border-gray-300;
+    min-width: 600px; /* Ajusta el valor según sea necesario para forzar el scroll en pantallas pequeñas */
+  }
+
+  /* Estilos de las celdas */
+  th,
+  td {
+    @apply border border-gray-300 px-3 py-1;
+  }
+}
+/* Contenedor de tablas para scroll horizontal */
