@@ -9,6 +9,7 @@ export interface Props {
   ogImage?: string | undefined;
   articleDate?: string | undefined;
   articleAuthor?: string | undefined;
+  isHome?: boolean;
 }
 const {
   title,
@@ -16,6 +17,7 @@ const {
   ogImage,
   articleDate,
   articleAuthor,
+  isHome = false,
 } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImageURL = new URL(
@@ -44,7 +46,7 @@ const siteTitle = `${title} • ${siteConfig.title}`;
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content={articleDate ? "article" : "website"} />
 <meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
+<meta property="og:title" content={isHome ? siteConfig.title : title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={socialImageURL} />
 
@@ -63,7 +65,7 @@ const siteTitle = `${title} • ${siteConfig.title}`;
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
+<meta property="twitter:title" content={isHome ? siteConfig.title : title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={socialImageURL} />
 
