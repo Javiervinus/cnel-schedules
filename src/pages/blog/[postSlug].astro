@@ -6,33 +6,37 @@
 // Astro.response.headers.set("Vercel-CDN-Cache-Control", "max-age=10");
 // Astro.response.headers.set("CDN-Cache-Control", "max-age=10");
 export const prerender = false;
-import type { BlogPost } from "@/interfaces/blog-post";
-import { contentfulClient } from "@/lib/contentful";
-import type { GetStaticPaths } from "astro";
 import { marked } from "marked";
 // import "../../styles/blog.css";
 import ContentBlog from "@/components/ContentBlog.astro";
 import ObserveTitle from "@/components/ObserveTitle.astro";
+import type { BlogPost } from "@/interfaces/blog-post";
 import BlogLayout from "@/layouts/BlogLayout.astro";
-export const getStaticPaths = (async () => {
-  const entries = await contentfulClient.getEntries<BlogPost>({
-    content_type: "blogPost",
+import { contentfulClient } from "@/lib/contentful";
+// export const getStaticPaths = (async () => {
+//   const entries = await contentfulClient.getEntries<BlogPost>({
+//     content_type: "blogPost",
 
-    include: 1,
-  });
+//     include: 1,
+//   });
 
-  return entries.items.map((post) => ({
-    params: {
-      postSlug: post.fields.slug,
-    },
-    props: {
-      post: post,
-    },
-  }));
-}) satisfies GetStaticPaths;
-
+//   return entries.items.map((post) => ({
+//     params: {
+//       postSlug: post.fields.slug,
+//     },
+//     props: {
+//       post: post,
+//     },
+//   }));
+// }) satisfies GetStaticPaths;
 const { postSlug } = Astro.params;
-const { post } = Astro.props;
+
+const entries = await contentfulClient.getEntries<BlogPost>({
+  content_type: "blogPost",
+  include: 1,
+  "fields.slug": postSlug, // Reemplaza "tu-slug-aqui" con el slug que deseas buscar
+});
+const post = entries.items[0];
 const content = post.fields.contentHtml;
 let contentMarkdown: string | Promise<string> = marked.parse(
   post.fields.contentMarkdown ?? ""
