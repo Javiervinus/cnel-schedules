@@ -18,15 +18,13 @@ export default defineConfig({
   site: "https://cnel-schedules.vercel.app",
   output: "server",
 
-  adapter:
-    vercel(),
-    //   {
-    //   isr: {
-    //     bypassToken: env.BYPASS_TOKEN_CACHE, // Cambiado para usar env
-    //     expiration: 60 * 60 * 24, // 24 horas
-    //   },
-    //   // edgeMiddleware: true,
-    // }
+  adapter: vercel({
+    isr: {
+      bypassToken: env.BYPASS_TOKEN_CACHE, // Cambiado para usar env
+      expiration: 60 * 60 * 24, // 24 horas
+      exclude: ["/"],
+    },
+  }),
 
   integrations: [
     tailwind({
