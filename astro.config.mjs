@@ -19,7 +19,7 @@ export default defineConfig({
   adapter: vercel({
     isr: {
       bypassToken: import.meta.env.BYPASS_TOKEN_CACHE,
-      expiration: 10,
+      expiration: 60 * 5,
     },
     edgeMiddleware: true,
   }),
