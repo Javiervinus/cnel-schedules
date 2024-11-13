@@ -17,6 +17,7 @@ import MdiClockOutline from "@/icons/MdiClockOutline.astro";
 import FluentFlashlight from "@/icons/FluentFlashlight.astro";
 import AntSchedule from "@/icons/AntSchedule.astro";
 import ServerNotifications from "@/components/ServerNotifications.astro";
+import BlogResumeSection from "@/components/BlogResumeSection.astro";
 const cautions: Cautions[] = [
   {
     icon: "PowerSwitch",
@@ -77,7 +78,7 @@ const getIconComponent = (icon: string) => {
 };
 ---
 
-<MainLayout title="Horarios CNEL - Cortes de Luz Ecuador">
+<MainLayout title="Inicio">
   <div class="mx-auto w-full max-w-6xl">
     <div class="grid grid-cols-12 flex-1 h-full">
       <!-- Sección Izquierda -->
@@ -107,12 +108,12 @@ const getIconComponent = (icon: string) => {
                 Ingresa tu identificación para consultar los horarios de cortes
                 de luz programados por CNEL en tu área.
               </p>
-              <ServerNotifications server:defer>
-                <!-- <div slot="fallback">.</div> -->
-              </ServerNotifications>
+              <!-- <ServerNotifications server:defer>
+              </ServerNotifications> -->
               <FormSchedule client:visible />
             </section>
-            <section class="flex flex-col w-full items-center gap-6">
+            <BlogResumeSection server:defer />
+            <section class="flex flex-col w-full items-start gap-6">
               <h2 class="md:text-xl text-xl font-bold">
                 Antes del corte de luz
               </h2>

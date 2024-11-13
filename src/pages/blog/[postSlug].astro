@@ -1,0 +1,84 @@
+---
+import type { BlogPost } from "@/interfaces/blog-post";
+import { contentfulClient } from "@/lib/contentful";
+import type { GetStaticPaths } from "astro";
+import { marked } from "marked";
+// import "../../styles/blog.css";
+import ContentBlog from "@/components/ContentBlog.astro";
+import ObserveTitle from "@/components/ObserveTitle.astro";
+import BlogLayout from "@/layouts/BlogLayout.astro";
+export const getStaticPaths = (async () => {
+  const entries = await contentfulClient.getEntries<BlogPost>({
+    content_type: "blogPost",
+
+    include: 1,
+  });
+
+  return entries.items.map((post) => ({
+    params: {
+      postSlug: post.fields.slug,
+    },
+    props: {
+      post: post,
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { postSlug } = Astro.params;
+const { post } = Astro.props;
+const content = post.fields.contentHtml;
+let contentMarkdown: string | Promise<string> = marked.parse(
+  post.fields.contentMarkdown ?? ""
+);
+---
+
+<BlogLayout
+  title={post.fields.title}
+  description={post.fields.summary}
+  image={post.fields.featuredImage?.fields.file.url}
+  articleDate={post.fields.publishDate}
+>
+  <section
+    class="max-w-3xl mx-auto flex flex-col w-full bg-background dark:bg-[#0a0910] shadow"
+  >
+    <img
+      src={post.fields.featuredImage?.fields.file.url}
+      alt={post.fields.title}
+      class="w-full h-60 object-cover md:block hidden"
+    />
+    <div class="p-6 md:p-8 flex flex-col">
+      <span class="text-center text-xs mb-4">
+        Publicado
+        <span class="font-semibold">
+          {
+            new Intl.DateTimeFormat("es-EC", {
+              dateStyle: "medium",
+            }).format(new Date(post.fields.publishDate))
+          }
+          - {post.fields.readingTime} min de lectura
+        </span>
+      </span>
+      <h1 class="text-2xl md:text-3xl font-bold mb-6 text-center">
+        {post.fields.title}
+      </h1>
+      <img
+        src={post.fields.featuredImage?.fields.file.url}
+        alt={post.fields.title}
+        class="w-full h-96 object-cover rounded-lg md:hidden block"
+      />
+
+      <h1 id="page-title" class="text-xl truncate font-semibold h-0">
+        <span class="flex md:hidden">
+          {post.fields.title.slice(0, 20)}...
+        </span>
+        <span class="md:flex hidden">
+          {post.fields.title.slice(0, 90)}...
+        </span>
+      </h1>
+
+      <ContentBlog content={content} contentMarkdown={contentMarkdown} />
+    </div>
+  </section>
+
+  <ObserveTitle />
+</BlogLayout>

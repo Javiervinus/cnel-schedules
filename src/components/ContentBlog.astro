@@ -1,0 +1,43 @@
+---
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import "../styles/blog.css";
+
+interface Props {
+  content: any;
+  contentMarkdown: string | Promise<string>;
+}
+
+const { content, contentMarkdown } = Astro.props;
+---
+
+{
+  content ? (
+    <article class="blog-content" set:html={documentToHtmlString(content)} />
+  ) : (
+    <article class="blog-content " set:html={contentMarkdown} />
+  )
+}
+<script is:inline>
+  document.addEventListener("astro:page-load", async () => {
+    // para las tablas
+    const tables = document.querySelectorAll(".blog-content table");
+    tables.forEach((table) => {
+      const wrapper = document.createElement("div");
+      wrapper.style.overflowX = "auto";
+      wrapper.style.display = "block";
+
+      wrapper.appendChild(table.cloneNode(true));
+      table.replaceWith(wrapper);
+    });
+
+    // para las imágenes
+    const images = document.querySelectorAll(".blog-content img");
+    images.forEach((image) => {
+      const wrapper = document.createElement("div");
+      wrapper.classList.add("flex", "justify-center");
+      wrapper.appendChild(image.cloneNode(true));
+      console.log(image);
+      image.replaceWith(wrapper);
+    });
+  });
+</script>
