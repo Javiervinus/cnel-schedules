@@ -16,12 +16,13 @@ const env = loadEnv(process.env.NODE_ENV || "development", process.cwd(), "");
 // https://astro.build/config
 export default defineConfig({
   site: "https://cnel-schedules.vercel.app",
-  output: "static",
+  output: "server",
 
   adapter: vercel({
     isr: {
       bypassToken: env.BYPASS_TOKEN_CACHE, // Cambiado para usar env
       expiration: 60 * 60 * 24, // 24 horas
+      exclude: ["/index"],
     },
     // edgeMiddleware: true,
   }),
