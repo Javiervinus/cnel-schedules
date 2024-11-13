@@ -17,9 +17,10 @@ export default defineConfig({
   site: "https://cnel-schedules.vercel.app",
   output: "hybrid",
   adapter: vercel({
-    // isr: {
-    //   expiration: 60,
-    // },
+    isr: {
+      bypassToken: import.meta.env.BYPASS_TOKEN_CACHE,
+      expiration: 60,
+    },
     edgeMiddleware: true,
   }),
   integrations: [
