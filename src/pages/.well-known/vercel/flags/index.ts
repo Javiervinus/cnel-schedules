@@ -29,41 +29,41 @@
 // };
 // src/pages/.well-known/vercel/flags/index.ts
 
-import { verifyAccess } from "@vercel/flags";
-import type { APIRoute } from "astro";
-import { featureFlags } from "../../../../config/feature-flags/definition";
+// import { verifyAccess } from "@vercel/flags";
+// import type { APIRoute } from "astro";
+// import { featureFlags } from "../../../../config/feature-flags/definition";
 
-export const prerender = false;
+// export const prerender = false;
 
-export const GET: APIRoute = async ({ request }) => {
-  const access = await verifyAccess(
-    request.headers.get("Authorization"),
-    // @ts-expect-error
-    import.meta.env.FLAGS_SECRET
-  );
+// export const GET: APIRoute = async ({ request }) => {
+//   const access = await verifyAccess(
+//     request.headers.get("Authorization"),
+//     // @ts-expect-error
+//     import.meta.env.FLAGS_SECRET
+//   );
 
-  if (!access) {
-    return new Response(null, { status: 401 });
-  }
+//   if (!access) {
+//     return new Response(null, { status: 401 });
+//   }
 
-  const definitions = Object.fromEntries(
-    Object.entries(featureFlags).map(([key, { description, options }]) => [
-      key,
-      {
-        description,
-        options,
-      },
-    ])
-  );
+//   const definitions = Object.fromEntries(
+//     Object.entries(featureFlags).map(([key, { description, options }]) => [
+//       key,
+//       {
+//         description,
+//         options,
+//       },
+//     ])
+//   );
 
-  return new Response(
-    JSON.stringify({
-      definitions,
-    }),
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-};
+//   return new Response(
+//     JSON.stringify({
+//       definitions,
+//     }),
+//     {
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     }
+//   );
+// };
