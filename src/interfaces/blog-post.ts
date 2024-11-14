@@ -12,5 +12,6 @@ export interface BlogPost {
     contentHtml?: EntryFieldTypes.RichText;
     publishDate: EntryFieldTypes.Date;
     readingTime: EntryFieldTypes.Number;
+    summaryAi?: EntryFieldTypes.Text;
   };
 }
