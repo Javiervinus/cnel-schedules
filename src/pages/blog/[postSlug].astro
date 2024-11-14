@@ -1,4 +1,6 @@
 ---
+export const prerender = false;
+
 Astro.response.headers.set(
   "Cache-Control",
   "s-maxage=180, stale-while-revalidate"
