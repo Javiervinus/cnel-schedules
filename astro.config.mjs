@@ -22,7 +22,7 @@ export default defineConfig({
     isr: {
       bypassToken: env.BYPASS_TOKEN_CACHE, // Cambiado para usar env
       expiration: 60 * 60 * 24, // 24 horas
-      exclude: ["/"],
+      exclude: ["/server-islands"],
     },
   }),
 
