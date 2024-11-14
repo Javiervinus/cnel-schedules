@@ -54,7 +54,9 @@ export default blogUrlsPromise.then((blogUrls) =>
         applyBaseStyles: false,
       }),
       react(),
-      sitemap(),
+      sitemap({
+        customPages: blogUrls,
+      }),
       icon(),
       partytown({
         config: {
