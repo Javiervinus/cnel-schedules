@@ -14,7 +14,7 @@ const { white } = Astro.props;
     class="container flex h-14 max-w-screen-lg mx-auto items-center md:px-6 lg:px-0 px-6"
   >
     <a id="home" href="/" data-astro-history="replace" class="hidden">
-      <ArrowLeft />
+      <ArrowLeft client:idle />
       <span class="sr-only">Inicio</span>
     </a>
     <!-- Espacio para el título dinámico en el Appbar -->
@@ -31,11 +31,11 @@ const { white } = Astro.props;
         rel="noopener noreferrer"
         class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 w-9"
       >
-        <Github />
+        <Github client:idle />
         <span class="sr-only">Repositorio en Github</span>
       </a>
 
-      <ModeToggle client:load />
+      <ModeToggle client:idle />
     </div>
   </div>
 </header>

@@ -31,10 +31,8 @@ import BlogLayout from "@/layouts/BlogLayout.astro";
 import { contentfulClient } from "@/lib/contentful";
 import { generateAudioIfNecessary } from "@/lib/elevanlabs";
 import { marked } from "marked";
-import OpenAI from "openai";
 
 const { postSlug } = Astro.params;
-const client = new OpenAI({ apiKey: import.meta.env.OPENAI_API_KEY });
 
 const entries = await contentfulClient.getEntries<BlogPost>({
   content_type: "blogPost",
@@ -47,7 +45,7 @@ const content = post.fields.contentHtml;
 let contentMarkdown: string | Promise<string> = marked.parse(
   post.fields.contentMarkdown ?? ""
 );
-const lastUpdatedAt = new Date(post.sys.updatedAt).toISOString();
+// const lastUpdatedAt = new Date(post.sys.updatedAt).toISOString();
 
 let audioLink: string | undefined = undefined;
 if (post.fields.summaryAi) {
@@ -99,6 +97,7 @@ if (post.fields.summaryAi) {
             <span class="flex items-center dark:text-white mb-2">
               Escucha un resumen del artículo
               <Badge
+                client:visible
                 className="ml-2 bg-gray-800 dark:bg-gray-700 text-white"
                 variant="outline"
               >
