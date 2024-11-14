@@ -1,7 +1,6 @@
+import { list, put } from "@vercel/blob";
 import crypto from "crypto";
-import { promises as fs } from "fs";
 import OpenAI from "openai";
-import path from "path";
 
 const client = new OpenAI({ apiKey: import.meta.env.OPENAI_API_KEY });
 
@@ -15,31 +14,46 @@ export async function generateAudioIfNecessary(
   postSlug: string,
   summary: string
 ): Promise<string> {
-  const voice: "alloy" | "echo" | "fable" | "onyx" | "nova" | "shimmer" =
-    "nova";
   const summaryHash = generateHash(summary);
-  const audioFilePath = path.resolve(
-    `./public/audios/${postSlug}-${summaryHash}-${voice}.mp3`
-  );
+  const audioFileName = `audios/${postSlug}-${summaryHash}.mp3`;
+  console.log("audioFileName", audioFileName);
+
   try {
-    await fs.access(audioFilePath);
-    console.log("Audio ya existente y actualizado. No se generará de nuevo.");
-    return `/audios/${postSlug}-${summaryHash}-${voice}.mp3`;
+    // Verificar si el archivo ya existe en Vercel Blob usando list
+    const existingBlobs = await list({ prefix: `audios/`, mode: "expanded" });
+
+    console.log("existingBlobs", existingBlobs);
+    console.log("existingBlobsBlobs", existingBlobs.blobs);
+    const existingBlob = existingBlobs.blobs.find(
+      (blob) =>
+        blob.pathname === audioFileName ||
+        blob.pathname.startsWith(audioFileName)
+    );
+    console.log("existingBlob", existingBlob);
+    if (existingBlob) {
+      console.log("Audio ya existente y actualizado en Vercel Blob.");
+      return existingBlob.url; // Retorna la URL del blob existente
+    }
   } catch (e) {
-    console.log("No existe un audio actualizado. Generando...");
+    console.log("No existe un audio actualizado en Vercel Blob. Generando...");
   }
 
   // Genera el audio con OpenAI
   const mp3 = await client.audio.speech.create({
     model: "tts-1",
-    speed: 1.05,
     input: summary,
-    voice: voice,
+    voice: "nova",
   });
   const buffer = Buffer.from(await mp3.arrayBuffer());
+  console.log("audioFileNameFinal", audioFileName);
 
-  await fs.mkdir(path.dirname(audioFilePath), { recursive: true });
-  await fs.writeFile(audioFilePath, new Uint8Array(buffer));
+  // Subir el archivo de audio a Vercel Blob usando `put`
+  const { url } = await put(audioFileName, buffer, {
+    access: "public",
+    contentType: "audio/mpeg",
+    cacheControlMaxAge: 60 * 60 * 24 * 365, // 1 año
+  });
+  console.log("audioFileNameFinalUrl", url);
 
-  return `/audios/${postSlug}-${summaryHash}-${voice}.mp3`;
+  return url;
 }
