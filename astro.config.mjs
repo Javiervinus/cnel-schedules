@@ -34,10 +34,11 @@ async function getBlogPostUrls(env) {
     content_type: "blogPost",
     select: ["fields.slug"],
   });
-
-  return entries.items.map(
+  const urls = entries.items.map(
     (post) => `https://cnel-schedules.vercel.app/blog/${post.fields.slug}`
   );
+
+  return urls;
 }
 
 // Obtiene las URLs antes de exportar la configuración
