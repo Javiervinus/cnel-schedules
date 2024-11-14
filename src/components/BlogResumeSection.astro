@@ -21,9 +21,9 @@ const entries = await contentfulClient.getEntries<BlogPost>({
 
 <section class="flex-flex-col gap-2">
   <h2 class="md:text-xl text-xl font-bold">
-    Articulos relacionados <Badge variant="default">
+    Articulos relacionados <Badge client:visible variant="default">
       Nuevo
-      <Sparkles size={9} />
+      <Sparkles client:visible size={9} />
     </Badge>
   </h2>
   <div class="grid md:grid-cols-3 gap-4 mt-4 grid-cols-1">
