@@ -37,6 +37,7 @@ async function getBlogPostUrls(env) {
   const urls = entries.items.map(
     (post) => `https://cnel-schedules.vercel.app/blog/${post.fields.slug}`
   );
+  console.log("URLs de blog obtenidas:", urls);
 
   return urls;
 }
