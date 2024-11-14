@@ -24,7 +24,6 @@ Astro.response.headers.set(
 );
 
 import ContentBlog from "@/components/ContentBlog.astro";
-import ObserveTitle from "@/components/ObserveTitle.astro";
 import { Badge } from "@/components/ui/badge";
 import type { BlogPost } from "@/interfaces/blog-post";
 import BlogLayout from "@/layouts/BlogLayout.astro";
@@ -124,5 +123,5 @@ if (post.fields.summaryAi) {
     </div>
   </section>
 
-  <ObserveTitle />
+  <!-- <ObserveTitle /> -->
 </BlogLayout>
