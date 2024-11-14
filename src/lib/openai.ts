@@ -14,16 +14,14 @@ export async function generateAudioIfNecessary(
   postSlug: string,
   summary: string
 ): Promise<string> {
+  const voice = "nova";
   const summaryHash = generateHash(summary);
-  const audioFileName = `audios/${postSlug}-${summaryHash}.mp3`;
-  console.log("audioFileName", audioFileName);
+  const audioFileName = `audios/${postSlug}-${voice}-${summaryHash}.mp3`;
 
   try {
     // Verificar si el archivo ya existe en Vercel Blob usando list
     const existingBlobs = await list({ prefix: `audios/`, mode: "expanded" });
 
-    console.log("existingBlobs", existingBlobs);
-    console.log("existingBlobsBlobs", existingBlobs.blobs);
     const existingBlob = existingBlobs.blobs.find(
       (blob) =>
         blob.pathname === audioFileName ||
@@ -42,10 +40,9 @@ export async function generateAudioIfNecessary(
   const mp3 = await client.audio.speech.create({
     model: "tts-1",
     input: summary,
-    voice: "nova",
+    voice: voice,
   });
   const buffer = Buffer.from(await mp3.arrayBuffer());
-  console.log("audioFileNameFinal", audioFileName);
 
   // Subir el archivo de audio a Vercel Blob usando `put`
   const { url } = await put(audioFileName, buffer, {
@@ -53,7 +50,6 @@ export async function generateAudioIfNecessary(
     contentType: "audio/mpeg",
     cacheControlMaxAge: 60 * 60 * 24 * 365, // 1 año
   });
-  console.log("audioFileNameFinalUrl", url);
 
   return url;
 }
