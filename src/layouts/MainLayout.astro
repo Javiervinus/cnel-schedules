@@ -62,19 +62,39 @@ const { title, description, image, articleDate,articleAuthor,isHome } = Astro.pr
       )
     }
 
-<ClientRouter />
+<ClientRouter  />
+<script is:inline>
+  // Función para aplicar la preferencia de tema (oscuro o claro) a un documento específico
+  const applyThemePreference = (doc) => {
+    let theme = localStorage.getItem("theme") || "light"; // Obtener la preferencia del tema
+    const isDark = theme === "dark";
+    doc.documentElement.classList[isDark ? "add" : "remove"]("dark"); // Aplicar el tema
+  };
+
+  // Aplicar el tema al documento actual cuando la página se carga inicialmente
+  applyThemePreference(document);
+
+  // Observar cambios en la clase del documento para actualizar la preferencia en localStorage
+  if (typeof localStorage !== "undefined") {
+    const observer = new MutationObserver(() => {
+      const isDark = document.documentElement.classList.contains("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"], // Solo observar cambios en la clase
+    });
+  }
+
+  // Antes de que ocurra el intercambio de documentos, aplicar el tema al nuevo documento
+  document.addEventListener("astro:before-swap", (event) => {
+    applyThemePreference(event.newDocument); // Aplicar el tema al nuevo documento
+  });
+</script>
 </head>
   <body class="relative">
-    <section class="relative flex flex-col min-h-screen bg-background">
-      <Appbar />
-
-      <main class="flex flex-1 ">
-        <slot />
-      </main>
-
-      <Footer />
-    </section>
-    <Toaster client:load />
+    <slot/>
+    <!-- <Toaster client:load /> -->
 
   </body>
 </html>
@@ -126,34 +146,7 @@ const { title, description, image, articleDate,articleAuthor,isHome } = Astro.pr
     }
   }
 </script>
-<script is:inline>
-  // Función para aplicar la preferencia de tema (oscuro o claro) a un documento específico
-  const applyThemePreference = (doc) => {
-    let theme = localStorage.getItem("theme") || "light"; // Obtener la preferencia del tema
-    const isDark = theme === "dark";
-    doc.documentElement.classList[isDark ? "add" : "remove"]("dark"); // Aplicar el tema
-  };
 
-  // Aplicar el tema al documento actual cuando la página se carga inicialmente
-  applyThemePreference(document);
-
-  // Observar cambios en la clase del documento para actualizar la preferencia en localStorage
-  if (typeof localStorage !== "undefined") {
-    const observer = new MutationObserver(() => {
-      const isDark = document.documentElement.classList.contains("dark");
-      localStorage.setItem("theme", isDark ? "dark" : "light");
-    });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"], // Solo observar cambios en la clase
-    });
-  }
-
-  // Antes de que ocurra el intercambio de documentos, aplicar el tema al nuevo documento
-  document.addEventListener("astro:before-swap", (event) => {
-    applyThemePreference(event.newDocument); // Aplicar el tema al nuevo documento
-  });
-</script>
 <script is:inline>
   const CloneMode = {
     CLONE_NODE: 0, // Clonar el nodo completo (por defecto)
