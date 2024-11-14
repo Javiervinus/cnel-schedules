@@ -1,49 +1,19 @@
 // @ts-check
-import { defineConfig } from "astro/config";
-
-import tailwind from "@astrojs/tailwind";
-import { loadEnv } from "vite"; // Importa loadEnv de Vite
-
 import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
+import tailwind from "@astrojs/tailwind";
 import vercel from "@astrojs/vercel";
 import icon from "astro-icon";
+import { defineConfig } from "astro/config";
+import { loadEnv } from "vite";
 
-// Carga las variables de entorno
 const env = loadEnv(process.env.NODE_ENV || "development", process.cwd(), "");
 
-// https://astro.build/config
-export default defineConfig({
-  site: "https://cnel-schedules.vercel.app",
-  adapter: vercel(),
-
-  //   {
-  //   isr: {
-  //     bypassToken: env.BYPASS_TOKEN_CACHE, // Cambiado para usar env
-  //     expiration: 60, // 2 minutos
-  //     exclude: ["/server-islands/[...slug]", "/_server-islands/[...slug]"],
-  //   },
-  // }
-
-  integrations: [
-    tailwind({
-      applyBaseStyles: false,
-    }),
-    react(),
-    sitemap({
-      customPages: await getBlogPostUrls(env), // Pasando env aquí
-    }),
-    icon(),
-    partytown({
-      config: {
-        forward: ["dataLayer.push"],
-      },
-    }),
-  ],
-});
 /**
- * @param {Record<string, string>} env - Environment variables
+ * Obtiene las URLs del blog desde Contentful.
+ * @param {Record<string, string>} env - Variables de entorno
+ * @returns {Promise<string[]>} - Promesa que resuelve a un array de URLs
  */
 async function getBlogPostUrls(env) {
   const contentful = await import("contentful");
@@ -69,3 +39,28 @@ async function getBlogPostUrls(env) {
     (post) => `https://cnel-schedules.vercel.app/blog/${post.fields.slug}`
   );
 }
+
+// Obtiene las URLs antes de exportar la configuración
+const blogUrlsPromise = getBlogPostUrls(env);
+
+export default blogUrlsPromise.then((blogUrls) =>
+  defineConfig({
+    site: "https://cnel-schedules.vercel.app",
+    adapter: vercel(),
+    integrations: [
+      tailwind({
+        applyBaseStyles: false,
+      }),
+      react(),
+      sitemap({
+        customPages: blogUrls,
+      }),
+      icon(),
+      partytown({
+        config: {
+          forward: ["dataLayer.push"],
+        },
+      }),
+    ],
+  })
+);
