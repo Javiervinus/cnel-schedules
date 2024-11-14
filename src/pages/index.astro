@@ -17,6 +17,7 @@ import MdiClockOutline from "@/icons/MdiClockOutline.astro";
 import FluentFlashlight from "@/icons/FluentFlashlight.astro";
 import AntSchedule from "@/icons/AntSchedule.astro";
 import BlogResumeSection from "@/components/BlogResumeSection.astro";
+import Layout from "@/layouts/Layout.astro";
 const cautions: Cautions[] = [
   {
     icon: "PowerSwitch",
@@ -77,7 +78,7 @@ const getIconComponent = (icon: string) => {
 };
 ---
 
-<MainLayout title="Inicio" isHome={true}>
+<Layout title="Inicio" isHome={true}>
   <div class="mx-auto w-full max-w-6xl">
     <div class="grid grid-cols-12 flex-1 h-full">
       <!-- Sección Izquierda -->
@@ -151,7 +152,7 @@ const getIconComponent = (icon: string) => {
       </div>
     </div>
   </div>
-</MainLayout>
+</Layout>
 <script is:inline>
   function observeTitle(options = {}) {
     const {
