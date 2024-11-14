@@ -25,3 +25,5 @@ pnpm-debug.log*
 .idea/
 .vercel
 .env*.local
+
+public/audios/
