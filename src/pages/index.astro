@@ -124,7 +124,9 @@ const getIconComponent = (icon: string) => {
                   cautions.map((caution) => {
                     const IconComponent = getIconComponent(caution.icon);
                     return (
-                      <div class="flex flex-col gap-2 items-center sm:items-start border  w-full  p-4 rounded-xl bg-card  ">
+                      //
+                      //intersect:animate-in intersect:zoom-in  intersect:duration-300 intersect-once
+                      <div class="flex flex-col gap-2 items-center sm:items-start border  w-full  p-4 rounded-xl bg-card  animate-in fade-in opacity-0  intersect:opacity-100 duration-300 transition intersect-half ">
                         {IconComponent && (
                           <IconComponent class={caution.class} />
                         )}

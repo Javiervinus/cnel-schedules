@@ -7,12 +7,11 @@ import "@/styles/globals.css";
 import ViewTransitions from "astro/components/ViewTransitions.astro";
 
 
-
 const { title, description, image, articleDate,articleAuthor,isHome } = Astro.props
 ---
 
 <!doctype html>
-<html lang="es-EC">
+<html lang="es-EC" transition:animate="none">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Language" content="es-EC" />
@@ -93,7 +92,7 @@ const { title, description, image, articleDate,articleAuthor,isHome } = Astro.pr
   });
 </script>
 </head>
-  <body class="relative">
+  <body class="relative" transition:animate="slide">
     <slot/>
 
   </body>
@@ -162,5 +161,6 @@ const { title, description, image, articleDate,articleAuthor,isHome } = Astro.pr
     appBarHeight: 56,
   };
 </script>
+<script defer src="https://unpkg.com/tailwindcss-intersect@2.x.x/dist/observer.min.js"></script>
 
 
