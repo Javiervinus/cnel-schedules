@@ -51,27 +51,33 @@ export async function generateAudioIfNecessary(
     console.error(e);
     console.log("No existe un audio actualizado en Vercel Blob. Generando...");
   }
-  // Genera el audio con ElevenLabs
-  const mp3Stream = await client.generate({
-    text: summary,
-    voice: voice,
-    model_id: "eleven_turbo_v2_5",
-    voice_settings: {
-      stability: 0.5,
-      similarity_boost: 0.5,
-    },
-  });
 
-  // Convierte el Readable Stream en un Buffer
-  const buffer = await streamToBuffer(mp3Stream);
+  try {
+    // Genera el audio con ElevenLabs
+    const mp3Stream = await client.generate({
+      text: summary,
+      voice: voice,
+      model_id: "eleven_turbo_v2_5",
+      voice_settings: {
+        stability: 0.5,
+        similarity_boost: 0.5,
+      },
+    });
 
-  // Subir el archivo de audio a Vercel Blob usando `put`
-  const { url } = await put(audioFileName, buffer, {
-    access: "public",
-    contentType: "audio/mpeg",
-    cacheControlMaxAge: 60 * 60 * 24 * 365, // 1 año,
-    token: import.meta.env.BLOB_READ_WRITE_TOKEN,
-  });
+    // Convierte el Readable Stream en un Buffer
+    const buffer = await streamToBuffer(mp3Stream);
 
-  return url;
+    // Subir el archivo de audio a Vercel Blob usando `put`
+    const { url } = await put(audioFileName, buffer, {
+      access: "public",
+      contentType: "audio/mpeg",
+      cacheControlMaxAge: 60 * 60 * 24 * 365, // 1 año,
+      token: import.meta.env.BLOB_READ_WRITE_TOKEN,
+    });
+    return url;
+  } catch (error) {
+    console.error(error);
+    console.log("Error al generar el audio con ElevenLabs.");
+    return "";
+  }
 }

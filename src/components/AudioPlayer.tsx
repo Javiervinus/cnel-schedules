@@ -59,7 +59,7 @@ export default function CustomAudioPlayer({ url }: CustomAudioPlayerProps) {
 
   return (
     <>
-      <div className="flex flex-row md:fixed md:bottom-5  md:right-10 w-full md:w-auto justify-center items-center  rounded-xl min-h-[2.5rem]  bg-[#171717] text-white mb-2 gap-0  sticky top-[3.75rem] md:top-auto">
+      <div className="flex flex-row md:fixed md:bottom-5  md:right-10 w-full md:w-auto justify-center items-center  rounded-xl min-h-[2.5rem]  bg-[#171717] text-white mb-3 gap-0  sticky top-[3.75rem] md:top-auto">
         <span className="flex items-center dark:text-white p-2 flex-shrink-0">
           <Sparkles className="mr-2" size={14} />
           Escucha un resumen

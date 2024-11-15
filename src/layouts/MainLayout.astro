@@ -7,12 +7,11 @@ import "@/styles/globals.css";
 import ViewTransitions from "astro/components/ViewTransitions.astro";
 
 
-
 const { title, description, image, articleDate,articleAuthor,isHome } = Astro.props
 ---
 
 <!doctype html>
-<html lang="es-EC">
+<html lang="es-EC" transition:animate="none">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Language" content="es-EC" />
@@ -93,7 +92,7 @@ const { title, description, image, articleDate,articleAuthor,isHome } = Astro.pr
   });
 </script>
 </head>
-  <body class="relative">
+  <body class="relative" transition:animate="slide">
     <slot/>
 
   </body>
@@ -146,4 +145,22 @@ const { title, description, image, articleDate,articleAuthor,isHome } = Astro.pr
     }
   }
 </script>
+<script is:inline>
+  const CloneMode = {
+    CLONE_NODE: 0, // Clonar el nodo completo (por defecto)
+    INNER_HTML: 1, // Usar innerHTML
+    TEXT_CONTENT: 2, // Usar textContent
+  };
+
+  const defaultOptions = {
+    titleId: "page-title",
+    appBarTitleId: "appbar-title",
+    cloneMode: CloneMode.CLONE_NODE,
+    removeLeadingIcons: true,
+    maxFontSize: 18,
+    appBarHeight: 56,
+  };
+</script>
+<script defer src="https://unpkg.com/tailwindcss-intersect@2.x.x/dist/observer.min.js"></script>
+
 
