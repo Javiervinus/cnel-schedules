@@ -4,7 +4,7 @@ import Footer from "@/components/Footer.astro";
 import BaseHead from "@/components/BaseHead.astro";
 import { Toaster } from "@/components/ui/sonner";
 import "@/styles/globals.css";
-import { ClientRouter } from 'astro:transitions';
+import ViewTransitions from "astro/components/ViewTransitions.astro";
 
 
 
@@ -34,7 +34,8 @@ const { title, description, image, articleDate,articleAuthor,isHome } = Astro.pr
       name="google-site-verification"
       content={import.meta.env.GOOGLE_SITE_VERIFICATION}
     />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    
     <!-- <script is:inline type="module" src="../scripts/appbar2.js"></script> -->
 
     {
@@ -62,7 +63,7 @@ const { title, description, image, articleDate,articleAuthor,isHome } = Astro.pr
       )
     }
 
-<ClientRouter  />
+<ViewTransitions  />
 <script is:inline>
   // Función para aplicar la preferencia de tema (oscuro o claro) a un documento específico
   const applyThemePreference = (doc) => {
@@ -94,7 +95,6 @@ const { title, description, image, articleDate,articleAuthor,isHome } = Astro.pr
 </head>
   <body class="relative">
     <slot/>
-    <!-- <Toaster client:load /> -->
 
   </body>
 </html>
@@ -147,31 +147,3 @@ const { title, description, image, articleDate,articleAuthor,isHome } = Astro.pr
   }
 </script>
 
-<script is:inline>
-  const CloneMode = {
-    CLONE_NODE: 0, // Clonar el nodo completo (por defecto)
-    INNER_HTML: 1, // Usar innerHTML
-    TEXT_CONTENT: 2, // Usar textContent
-  };
-
-  const defaultOptions = {
-    titleId: "page-title",
-    appBarTitleId: "appbar-title",
-    cloneMode: CloneMode.CLONE_NODE,
-    removeLeadingIcons: true,
-    maxFontSize: 18,
-    appBarHeight: 56,
-  };
-</script>
-<!-- {
-  import.meta.env.NODE_ENV === "development" ? (
-    <script
-      is:inline
-      src="https://vercel.live/_next-live/feedback/feedback.js"
-      data-explicit-opt-in="true"
-      data-owner-id={import.meta.env.VERCEL_LIVE_OWNER_ID}
-      data-project-id={import.meta.env.VERCEL_LIVE_PROJECT_ID}
-      data-branch="develop"
-    />
-  ) : null
-} -->
