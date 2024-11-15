@@ -8,4 +8,5 @@ interface ImportMetaEnv {
   readonly GOOGLE_ADSENSE: string;
   readonly GOOGLE_SITE_VERIFICATION: string;
   readonly UMAMI_ID: string;
+  readonly BLOB_READ_WRITE_TOKEN: string;
 }
