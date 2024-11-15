@@ -44,7 +44,7 @@ const entries = await contentfulClient.getEntries<BlogPost>({
                 quality="low"
                 loading="lazy"
               />
-              <section class="p-4 flex flex-col gap-2 ">
+              <section class="px-4 pb-4 flex flex-col gap-2 ">
                 <h5 class="text-left font-semibold">
                   {entry.fields.shortTitle}
                 </h5>
