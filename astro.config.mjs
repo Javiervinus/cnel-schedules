@@ -2,8 +2,9 @@
 import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
+
 import tailwind from "@astrojs/tailwind";
-import vercel from "@astrojs/vercel";
+import vercel from "@astrojs/vercel/serverless";
 import icon from "astro-icon";
 import { defineConfig } from "astro/config";
 import { loadEnv } from "vite";
@@ -48,6 +49,7 @@ const blogUrlsPromise = getBlogPostUrls(env);
 export default blogUrlsPromise.then((blogUrls) =>
   defineConfig({
     site: "https://cnel-schedules.vercel.app",
+    output: "hybrid",
     adapter: vercel(),
     integrations: [
       tailwind({
@@ -64,5 +66,8 @@ export default blogUrlsPromise.then((blogUrls) =>
         },
       }),
     ],
+    experimental: {
+      serverIslands: true,
+    },
   })
 );
