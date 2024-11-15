@@ -67,6 +67,7 @@ if (post.fields.summaryAi) {
     <img
       src={post.fields.featuredImage?.fields.file.url}
       alt={post.fields.title}
+      transition:name={`${post.fields.slug}-image`}
       class="w-full h-60 object-cover md:block hidden"
     />
     <div class="p-6 md:p-8 flex flex-col">
