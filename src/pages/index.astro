@@ -97,28 +97,10 @@ const getIconComponent = (icon: string) => {
               <!-- Bloque de anuncio de Google AdSense -->
               <div class="w-full">
                 <!-- Anuncio horizontal con partytown -->
-                <script
-                  type="text/partytown"
-                  async
-                  src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3539262897027553"
-                  crossorigin="anonymous"></script>
-
-                <ins
-                  class="adsbygoogle"
-                  style="display:block"
-                  data-ad-client="ca-pub-3539262897027553"
-                  data-ad-slot="7968087600"
-                  data-ad-format="horizontal"
-                  data-full-width-responsive="true"
-                >
-                </ins>
-
-                <script type="text/partytown">
-                  (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
+                <!-- Carga del script con Partytown -->
 
                 <!-- Anuncio horizontal sin partytown-->
-                <!-- <script
+                <script
                   async
                   src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3539262897027553"
                   crossorigin="anonymous"></script>
@@ -134,7 +116,7 @@ const getIconComponent = (icon: string) => {
                     // Inicializar AdSense al cargar una nueva página
                     (adsbygoogle = window.adsbygoogle || []).push({});
                   });
-                </script> -->
+                </script>
               </div>
 
               <h1 id="page-title" class="text-4xl text-start mb-3 font-bold">
