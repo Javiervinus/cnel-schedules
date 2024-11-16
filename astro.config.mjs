@@ -62,7 +62,8 @@ export default blogUrlsPromise.then((blogUrls) =>
       icon(),
       partytown({
         config: {
-          forward: ["dataLayer.push"],
+          //adsense
+          forward: ["dataLayer.push", "adsbygoogle"],
         },
       }),
     ],
