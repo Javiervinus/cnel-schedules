@@ -1,5 +1,5 @@
 ---
-import { Github, ArrowLeft } from "lucide-react";
+import { Github, ArrowLeft, HomeIcon } from "lucide-react";
 import { ModeToggle } from "./ModeToggle";
 interface Props {
   white?: boolean;
@@ -13,10 +13,10 @@ const { white } = Astro.props;
   <div
     class="container flex h-14 max-w-screen-lg mx-auto items-center md:px-6 lg:px-0 px-6"
   >
-    <button onclick="history.back()" id="home" class="hidden">
-      <ArrowLeft client:idle />
+    <a href="/" id="home" class="hidden">
+      <HomeIcon client:idle />
       <span class="sr-only">Inicio</span>
-    </button>
+    </a>
     <!-- Espacio para el título dinámico en el Appbar -->
     <div
       id="appbar-title"
