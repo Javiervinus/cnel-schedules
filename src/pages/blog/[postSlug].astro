@@ -20,9 +20,10 @@ export const prerender = false;
 
 Astro.response.headers.set(
   "Cache-Control",
-  "s-maxage=180, stale-while-revalidate"
+  "s-maxage=600, stale-while-revalidate"
 );
-
+Astro.response.headers.set("Vercel-CDN-Cache-Control", "max-age=3600");
+Astro.response.headers.set("CDN-Cache-Control", "max-age=600");
 import CustomAudioPlayer from "@/components/AudioPlayer";
 import ContentBlog from "@/components/ContentBlog.astro";
 import ObserveTitle from "@/components/ObserveTitle.astro";
