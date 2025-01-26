@@ -45,7 +45,7 @@ export default function ScheduleCard({
   const [firstDate, setFirstDate] = useState<Date | null>(null);
   const [lastDate, setLastDate] = useState<Date | null>(null);
   const [diffDays, setDiffDays] = useState<number>(0);
-
+  const existsSchedules = false;
   useEffect(() => {
     setNearestCutDate(getNearestCutDate(notification.groupedPlanificacion!));
     setCurrentCut(isCurrentCut(new Date(), notification.groupedPlanificacion!));
@@ -126,25 +126,27 @@ export default function ScheduleCard({
                   <Alert variant="default" className="mt-2">
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>No se encontraron horarios</AlertTitle>
-                    <AlertDescription>
-                      Intenta nuevamente, si el problema persiste revisa la
-                      cuenta oficial de{" "}
-                      <a
-                        href="https://x.com/CNEL_EP"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
-                      >
-                        CNEL EP
-                      </a>{" "}
-                      en X si porporcionaron un PDF para tu zona.
-                    </AlertDescription>
+                    {existsSchedules ? (
+                      <AlertDescription>
+                        Intenta nuevamente, si el problema persiste revisa la
+                        cuenta oficial de{" "}
+                        <a
+                          href="https://x.com/CNEL_EP"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline"
+                        >
+                          CNEL EP
+                        </a>{" "}
+                        en X si porporcionaron un PDF para tu zona.
+                      </AlertDescription>
+                    ) : (
+                      <AlertDescription>
+                        Se acabaron los apagones programados por el momento,
+                        ¡disfruta de la luz y sigue ahorrando energía! 🎉
+                      </AlertDescription>
+                    )}
                   </Alert>
-                  {/* <div className="grid  md:grid-cols-3 grid-cols-1 justify-center w-full ">
-                    <div className="md:col-start-2 col-start-1">
-                      <Tweet tweetId="1849704288295022991" />
-                    </div>
-                  </div> */}
                 </>
               )}
             </span>
